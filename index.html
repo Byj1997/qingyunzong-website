@@ -2,1406 +2,641 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>青云宗管理系统</title>
     <style>
-        /* 全局样式重置 */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Microsoft YaHei", sans-serif;
+            font-family: "微软雅黑", sans-serif;
         }
-
         body {
             background-color: #f5f5f5;
-            color: #333;
-            line-height: 1.6;
-            padding-bottom: 20px;
+            padding: 20px;
         }
-
-        /* 登录页样式 */
-        .login-container {
+        .login-register-box, .main-page, .info-edit-box {
             max-width: 500px;
             margin: 50px auto;
-            padding: 20px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            display: none;
         }
-
-        .login-tab {
-            display: flex;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #eee;
+        .login-register-box.active, .main-page.active, .info-edit-box.active {
+            display: block;
         }
-
-        .login-tab-item {
-            flex: 1;
+        h1, h2, h3 {
             text-align: center;
-            padding: 10px;
-            cursor: pointer;
-            font-weight: bold;
-            color: #666;
+            color: #333;
+            margin-bottom: 20px;
         }
-
-        .login-tab-item.active {
-            color: #2c3e50;
-            border-bottom: 2px solid #3498db;
-        }
-
-        .login-form {
-            display: none;
-        }
-
-        .login-form.active {
-            display: block;
-        }
-
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
-
-        .form-group label {
+        label {
             display: block;
             margin-bottom: 5px;
-            font-weight: 500;
+            color: #666;
         }
-
-        .form-group input, .form-group select {
+        input, select {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 5px;
             font-size: 16px;
         }
-
-        .btn {
-            width: 100%;
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            flex: 1;
             padding: 12px;
-            background: #3498db;
-            color: #fff;
+            color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
-            transition: background 0.3s;
         }
-
-        .btn:hover {
-            background: #2980b9;
+        .login-btn {
+            background-color: #4CAF50;
         }
-
-        /* 主页面样式 */
-        .main-container {
-            display: none;
-            padding: 10px;
+        .login-btn:hover {
+            background-color: #45a049;
         }
-
-        /* 头部样式 */
-        .header {
-            background: #2c3e50;
-            color: #fff;
-            padding: 15px 10px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .register-btn {
+            background-color: #007bff;
         }
-
-        .user-info-btn {
-            background: #3498db;
-            border: none;
-            color: #fff;
-            padding: 8px 15px;
-            border-radius: 4px;
-            cursor: pointer;
+        .register-btn:hover {
+            background-color: #0069d9;
         }
-
-        /* 导航栏样式 */
-        .nav {
-            display: flex;
-            overflow-x: auto;
-            margin-bottom: 15px;
-            background: #fff;
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .nav-item {
-            padding: 8px 15px;
-            margin-right: 5px;
-            background: #eee;
-            border-radius: 4px;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-
-        .nav-item.active {
-            background: #3498db;
-            color: #fff;
-        }
-
-        /* 内容区域样式 */
-        .content {
-            background: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            min-height: 400px;
-        }
-
-        .page {
-            display: none;
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        /* 表单和列表样式 */
-        .form-item {
-            margin-bottom: 10px;
-        }
-
-        .form-item label {
-            display: block;
-            margin-bottom: 3px;
-            font-size: 14px;
-        }
-
-        .form-item input, .form-item textarea, .form-item select {
+        .edit-btn {
+            background-color: #ffc107;
+            color: #333;
             width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
+            margin-top: 10px;
         }
-
-        .btn-small {
-            padding: 6px 12px;
-            font-size: 14px;
-            width: auto;
+        .edit-btn:hover {
+            background-color: #ffca2c;
         }
-
-        .btn-success {
-            background: #2ecc71;
+        .save-btn {
+            background-color: #28a745;
+            width: 100%;
         }
-
-        .btn-danger {
-            background: #e74c3c;
+        .save-btn:hover {
+            background-color: #218838;
         }
-
-        .list-item {
+        .cancel-btn {
+            background-color: #dc3545;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .cancel-btn:hover {
+            background-color: #c82333;
+        }
+        .menu {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .menu button {
+            width: calc(50% - 5px);
+            padding: 12px;
+        }
+        .content {
+            display: none;
+            padding: 20px;
+            border-top: 1px solid #eee;
+        }
+        .content.active {
+            display: block;
+        }
+        .member-item {
             padding: 10px;
             border-bottom: 1px solid #eee;
-            margin-bottom: 5px;
-            border-radius: 4px;
-        }
-
-        .list-item:hover {
-            background: #f9f9f9;
-        }
-
-        .flex-between {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* 弹窗样式 */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .modal-content {
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            width: 100%;
-            max-width: 400px;
-        }
-
-        .modal-close {
-            text-align: right;
-            cursor: pointer;
-            font-size: 20px;
-            color: #666;
             margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
         }
-
-        /* 响应式适配 */
-        @media (max-width: 480px) {
-            .login-container {
-                margin: 20px auto;
-                padding: 15px;
-            }
-
-            .content {
-                padding: 10px;
-            }
-
-            .nav-item {
-                padding: 6px 10px;
-            }
+        .member-item button {
+            width: 100%;
+            margin-top: 5px;
+            padding: 8px;
+            font-size: 14px;
+        }
+        .logout-btn {
+            background-color: #dc3545;
+            width: 100%;
+            margin-top: 30px;
+        }
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+        .permission-tip {
+            color: #dc3545;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .edit-tip {
+            color: #6c757d;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
-    <!-- 登录页面 -->
-    <div class="login-container" id="loginPage">
-        <h2 style="text-align: center; margin-bottom: 20px;">青云宗管理系统</h2>
-        <div class="login-tab">
-            <div class="login-tab-item active" data-tab="admin">管理员登录</div>
-            <div class="login-tab-item" data-tab="user">用户登录</div>
+    <!-- 登录/注册合一界面 -->
+    <div class="login-register-box active" id="loginRegisterBox">
+        <h1>青云宗登录/注册界面</h1>
+        <div class="form-group">
+            <label for="userName">姓名（账号）</label>
+            <input type="text" id="userName" placeholder="请输入姓名/账号">
         </div>
+        <div class="form-group">
+            <label for="userRole">身份</label>
+            <select id="userRole">
+                <option value="master">宗主（最高权限）</option>
+                <option value="elder">长老</option>
+                <option value="disciple">弟子</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="userPassword">密码</label>
+            <input type="password" id="userPassword" placeholder="注册/登录密码">
+        </div>
+        <div class="btn-group">
+            <button class="login-btn" onclick="login()">登录</button>
+            <button class="register-btn" onclick="register()">注册</button>
+        </div>
+    </div>
 
-        <!-- 管理员登录表单 -->
-        <div class="login-form active" id="adminLoginForm">
-            <div class="form-group">
-                <label for="adminName">姓名</label>
-                <input type="text" id="adminName" placeholder="请输入姓名">
-            </div>
-            <div class="form-group">
-                <label for="adminIdentity">身份</label>
-                <select id="adminIdentity">
-                    <option value="">请选择身份</option>
-                    <option value="宗主">宗主</option>
-                    <option value="副宗主">副宗主</option>
-                    <option value="太上长老">太上长老</option>
-                    <option value="护宗长老">护宗长老</option>
-                    <option value="传功长老">传功长老</option>
-                    <option value="执法长老">执法长老</option>
-                    <option value="外务长老">外务长老</option>
-                    <option value="云栖圃药长老">云栖圃药长老</option>
-                    <option value="执法堂主">执法堂主</option>
-                    <option value="刑堂执事">刑堂执事</option>
-                    <option value="任务堂执事">任务堂执事</option>
-                    <option value="贡献堂执事">贡献堂执事</option>
-                    <option value="藏经阁看守">藏经阁看守</option>
-                    <option value="丹殿主事">丹殿主事</option>
-                    <option value="器殿主事">器殿主事</option>
-                    <option value="符殿主事">符殿主事</option>
-                    <option value="阵殿主事">阵殿主事</option>
-                    <option value="凝云谷主">凝云谷主</option>
-                    <option value="落霞岭主">落霞岭主</option>
-                    <option value="万妖岭主">万妖岭主</option>
-                    <option value="凝霜峰主">凝霜峰主</option>
-                    <option value="朝阳峰主">朝阳峰主</option>
-                    <option value="皓月峰主">皓月峰主</option>
-                    <option value="清风峰主">清风峰主</option>
-                    <option value="流霞峰主">流霞峰主</option>
-                    <option value="惊雷峰主">惊雷峰主</option>
-                    <option value="甘霖峰主">甘霖峰主</option>
-                    <option value="苍松峰主">苍松峰主</option>
-                    <option value="翠柏峰主">翠柏峰主</option>
-                    <option value="丹霞峰主">丹霞峰主</option>
-                    <option value="碧波峰主">碧波峰主</option>
-                    <option value="傲雪峰主">傲雪峰主</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="adminPwd">密码</label>
-                <input type="password" id="adminPwd" placeholder="请输入密码">
-            </div>
-            <button class="btn" onclick="login('admin')">登录</button>
+    <!-- 个人信息修改界面 -->
+    <div class="info-edit-box" id="infoEditBox">
+        <h1>个人信息修改</h1>
+        <div class="form-group">
+            <label for="editNickname">昵称</label>
+            <input type="text" id="editNickname" placeholder="请输入昵称">
         </div>
-
-        <!-- 用户登录表单 -->
-        <div class="login-form" id="userLoginForm">
-            <div class="form-group">
-                <label for="userName">姓名</label>
-                <input type="text" id="userName" placeholder="请输入姓名">
-            </div>
-            <div class="form-group">
-                <label for="userIdentity">身份</label>
-                <input type="text" id="userIdentity" placeholder="请输入身份（无限制）">
-            </div>
-            <div class="form-group">
-                <label for="userPwd">密码</label>
-                <input type="password" id="userPwd" placeholder="请输入密码">
-            </div>
-            <button class="btn" onclick="login('user')">登录</button>
+        <div class="form-group">
+            <label for="editAge">年龄</label>
+            <input type="number" id="editAge" placeholder="请输入年龄">
         </div>
+        <div class="form-group">
+            <label for="editCultivation">修为境界</label>
+            <input type="text" id="editCultivation" placeholder="例如：筑基期/金丹期">
+        </div>
+        <p class="edit-tip" id="editTip">普通用户仅能修改1次，修改后永久锁定</p>
+        <button class="save-btn" onclick="saveUserInfo()">保存信息</button>
+        <button class="cancel-btn" onclick="cancelEdit()">取消修改</button>
     </div>
 
     <!-- 主页面 -->
-    <div class="main-container" id="mainPage">
-        <!-- 头部 -->
-        <div class="header">
-            <h3 id="pageTitle">青云宗管理系统</h3>
-            <button class="user-info-btn" onclick="openUserInfoModal()">个人信息</button>
+    <div class="main-page" id="mainPage">
+        <h1 id="welcomeTitle">欢迎登录青云宗管理系统</h1>
+        <div class="menu" id="menuBar">
+            <!-- 菜单根据身份动态生成 -->
         </div>
 
-        <!-- 导航栏 -->
-        <div class="nav" id="mainNav"></div>
-
-        <!-- 内容区域 -->
-        <div class="content" id="mainContent"></div>
-    </div>
-
-    <!-- 个人信息弹窗 -->
-    <div class="modal" id="userInfoModal">
-        <div class="modal-content">
-            <div class="modal-close" onclick="closeModal('userInfoModal')">×</div>
-            <h3 style="margin-bottom: 15px;">个人信息</h3>
-            <div class="form-item">
-                <label>姓名</label>
-                <input type="text" id="modalUserName" disabled>
-            </div>
-            <div class="form-item">
-                <label>职务</label>
-                <input type="text" id="modalUserIdentity" disabled>
-            </div>
-            <div class="form-item">
-                <label>年龄</label>
-                <input type="text" id="modalUserAge" placeholder="请输入年龄">
-            </div>
-            <div class="form-item">
-                <label>境界</label>
-                <input type="text" id="modalUserRealm" placeholder="请输入境界">
-            </div>
-            <div class="form-item">
-                <label>当前密码</label>
-                <input type="password" id="modalOldPwd" placeholder="请输入当前密码">
-            </div>
-            <div class="form-item">
-                <label>新密码</label>
-                <input type="password" id="modalNewPwd" placeholder="请输入新密码">
-            </div>
-            <div class="form-item">
-                <label>贡献点总数</label>
-                <input type="text" id="modalUserPoints" disabled>
-            </div>
-            <button class="btn" onclick="saveUserInfo()">保存修改</button>
+        <!-- 宗主专属内容 -->
+        <div class="content" id="masterContent1">
+            <h3>宗主专属 - 宗训门规管理</h3>
+            <p>1. 可修改宗训门规，制定宗门规则</p>
+            <p>2. 可任免长老，调整宗门架构</p>
+            <p>3. 可审批高阶任务，分配宗门资源</p>
         </div>
+        <div class="content" id="masterContent2">
+            <h3>宗主专属 - 所有成员信息</h3>
+            <div id="allMemberList">
+                <!-- 所有注册成员列表 -->
+            </div>
+        </div>
+
+        <!-- 长老专属内容 -->
+        <div class="content" id="elderContent1">
+            <h3>长老专属 - 宗训门规查看</h3>
+            <p>1. 尊师重道，不得以下犯上</p>
+            <p>2. 团结同门，不得内斗相残</p>
+            <p>3. 坚守本心，不得堕入魔道</p>
+            <p>4. 护我宗门，不得泄露机密</p>
+        </div>
+        <div class="content" id="elderContent2">
+            <h3>长老专属 - 个人信息与弟子管理</h3>
+            <div id="elderInfo">
+                <!-- 长老个人信息 -->
+            </div>
+            <p style="margin-top: 20px;">当前管理的弟子数量：<span id="discipleCount">0</span></p>
+            <p>权限：审核弟子任务、发放宗门贡献</p>
+            <button class="edit-btn" id="elderEditBtn" onclick="showEditBox()">修改个人信息</button>
+        </div>
+
+        <!-- 弟子专属内容 -->
+        <div class="content" id="discipleContent1">
+            <h3>弟子专属 - 宗训门规学习</h3>
+            <p>1. 每日需背诵宗训门规，完成长老考核</p>
+            <p>2. 违反门规将扣除宗门贡献，严重者逐出师门</p>
+        </div>
+        <div class="content" id="discipleContent2">
+            <h3>弟子专属 - 个人信息与任务</h3>
+            <div id="discipleInfo">
+                <!-- 弟子个人信息 -->
+            </div>
+            <p>可接任务：</p>
+            <p>1. 宗门巡逻 - 奖励：宗门贡献×10</p>
+            <p>2. 下山历练 - 奖励：宗门贡献×50</p>
+            <button class="edit-btn" id="discipleEditBtn" onclick="showEditBox()">修改个人信息</button>
+        </div>
+
+        <!-- 通用无权限提示 -->
+        <div class="content" id="noPermissionContent">
+            <p class="permission-tip">您暂无访问该内容的权限！</p>
+        </div>
+
+        <button class="logout-btn" onclick="logout()">退出登录</button>
     </div>
 
     <script>
-        // 初始化数据
-        function initData() {
-            // 管理员身份列表
-            const adminIdentities = [
-                '宗主', '副宗主', '太上长老', '护宗长老', '传功长老', '执法长老', 
-                '外务长老', '云栖圃药长老', '执法堂主', '刑堂执事', '任务堂执事', 
-                '贡献堂执事', '藏经阁看守', '丹殿主事', '器殿主事', '符殿主事', 
-                '阵殿主事', '凝云谷主', '落霞岭主', '万妖岭主', '凝霜峰主', '朝阳峰主', 
-                '皓月峰主', '清风峰主', '流霞峰主', '惊雷峰主', '甘霖峰主', '苍松峰主', 
-                '翠柏峰主', '丹霞峰主', '碧波峰主', '傲雪峰主'
-            ];
-            localStorage.setItem('adminIdentities', JSON.stringify(adminIdentities));
-
-            // 最高权限管理员
-            const topAdmins = ['宗主', '副宗主', '太上长老'];
-            localStorage.setItem('topAdmins', JSON.stringify(topAdmins));
-
-            // 初始宗训门规
-            if (!localStorage.getItem('zongxun')) {
-                localStorage.setItem('zongxun', '青云宗宗训：忠肝义胆，守正辟邪，同心同德，共护宗门！');
-            }
-            if (!localStorage.getItem('mengui')) {
-                localStorage.setItem('mengui', '青云宗门规：\n1. 不得背叛宗门；\n2. 不得私自争斗；\n3. 需完成宗门指派任务；\n4. 遵守长老会决议。');
-            }
-
-            // 成员信息（初始为空，登录后自动添加）
-            if (!localStorage.getItem('members')) {
-                localStorage.setItem('members', JSON.stringify([]));
-            }
-
-            // 任务列表
-            if (!localStorage.getItem('tasks')) {
-                localStorage.setItem('tasks', JSON.stringify([]));
-            }
-
-            // 商城物品
-            if (!localStorage.getItem('shopItems')) {
-                localStorage.setItem('shopItems', JSON.stringify([]));
-            }
-
-            // 用户背包
-            if (!localStorage.getItem('userBackpack')) {
-                localStorage.setItem('userBackpack', JSON.stringify({}));
-            }
-        }
-
-        // 页面加载时初始化
+        // 全局变量
+        let currentUser = null;
+        let editTargetUser = null; // 用于宗主修改他人信息
+        // 初始化：检查登录状态
         window.onload = function() {
-            initData();
-            // 登录标签切换
-            document.querySelectorAll('.login-tab-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    document.querySelectorAll('.login-tab-item').forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    const tab = this.getAttribute('data-tab');
-                    document.querySelectorAll('.login-form').forEach(form => form.classList.remove('active'));
-                    document.getElementById(tab + 'LoginForm').classList.add('active');
-                });
-            });
+            checkLoginStatus();
         };
 
-        // 登录验证
-        function login(type) {
-            let name, identity, pwd, isAdmin = false;
-            const topAdmins = JSON.parse(localStorage.getItem('topAdmins'));
-            const adminIdentities = JSON.parse(localStorage.getItem('adminIdentities'));
-
-            if (type === 'admin') {
-                name = document.getElementById('adminName').value.trim();
-                identity = document.getElementById('adminIdentity').value.trim();
-                pwd = document.getElementById('adminPwd').value.trim();
-                isAdmin = true;
-
-                // 验证管理员身份是否有效
-                if (!adminIdentities.includes(identity)) {
-                    alert('管理员身份无效！');
-                    return;
-                }
-
-                // 验证初始密码
-                let correctPwd = '888888';
-                if (topAdmins.includes(identity)) {
-                    correctPwd = '999999';
-                }
-                if (pwd !== correctPwd) {
-                    alert('密码错误！');
-                    return;
-                }
+        // 检查登录状态（持久化）
+        function checkLoginStatus() {
+            const savedUser = localStorage.getItem('qyzz_user_info');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showMainPage();
             } else {
-                name = document.getElementById('userName').value.trim();
-                identity = document.getElementById('userIdentity').value.trim();
-                pwd = document.getElementById('userPwd').value.trim();
-
-                // 验证普通用户初始密码
-                if (pwd !== '666666') {
-                    alert('密码错误！');
-                    return;
-                }
+                showLoginRegister();
             }
+        }
 
-            // 验证必填项
-            if (!name || !identity || !pwd) {
-                alert('请填写完整信息！');
+        // 注册功能（强制注册：姓名+身份唯一）
+        function register() {
+            const name = document.getElementById('userName').value.trim();
+            const role = document.getElementById('userRole').value;
+            const password = document.getElementById('userPassword').value.trim();
+
+            // 空值验证
+            if (!name || !password) {
+                alert('姓名和密码不能为空！');
                 return;
             }
 
-            // 保存当前登录用户信息
-            const userInfo = {
-                name,
-                identity,
-                isAdmin,
-                pwd,
+            // 获取已注册用户列表
+            let registeredUsers = JSON.parse(localStorage.getItem('qyzz_registered_users')) || [];
+            
+            // 检查：相同姓名+相同身份的账号是否已存在
+            const isExist = registeredUsers.some(user => {
+                return user.name === name && user.role === role;
+            });
+
+            if (isExist) {
+                alert(`【${name}】-${getRoleName(role)} 已注册！请直接登录`);
+                return;
+            }
+
+            // 新用户默认信息
+            const newUser = {
+                name: name,
+                role: role,
+                password: password,
+                registerTime: new Date().toLocaleString(),
+                score: 0, // 宗门贡献
+                nickname: '',
                 age: '',
-                realm: '',
-                points: 0 // 初始贡献点为0
+                cultivation: '',
+                editCount: 0 // 修改次数：0=未修改，1=已修改（普通用户锁定）
             };
-            localStorage.setItem('currentUser', JSON.stringify(userInfo));
+            registeredUsers.push(newUser);
+            localStorage.setItem('qyzz_registered_users', JSON.stringify(registeredUsers));
 
-            // 添加成员到成员列表（如果不存在）
-            addMemberIfNotExist(userInfo);
-
-            // 跳转到主页面
-            showMainPage();
+            alert(`注册成功！【${name}】-${getRoleName(role)} 可登录`);
+            // 清空输入框
+            document.getElementById('userName').value = '';
+            document.getElementById('userPassword').value = '';
         }
 
-        // 添加成员到列表（不存在则添加）
-        function addMemberIfNotExist(userInfo) {
-            let members = JSON.parse(localStorage.getItem('members'));
-            const exist = members.some(m => m.name === userInfo.name && m.identity === userInfo.identity);
-            if (!exist) {
-                members.push({
-                    name: userInfo.name,
-                    identity: userInfo.identity,
-                    isAdmin: userInfo.isAdmin,
-                    age: '',
-                    realm: '',
-                    points: 0,
-                    forbiddenTask: false, // 是否禁止接取任务
-                    pwd: userInfo.pwd
-                });
-                localStorage.setItem('members', JSON.stringify(members));
+        // 登录功能（强制注册验证：无注册无法登录）
+        function login() {
+            const name = document.getElementById('userName').value.trim();
+            const role = document.getElementById('userRole').value;
+            const password = document.getElementById('userPassword').value.trim();
+
+            // 空值验证
+            if (!name || !password) {
+                alert('姓名和密码不能为空！');
+                return;
+            }
+
+            // 获取已注册用户
+            const registeredUsers = JSON.parse(localStorage.getItem('qyzz_registered_users')) || [];
+            
+            // 严格匹配：姓名+身份+密码全部一致
+            const matchedUser = registeredUsers.find(user => {
+                return user.name === name && user.role === role && user.password === password;
+            });
+
+            if (matchedUser) {
+                // 登录成功：保存用户信息到本地存储
+                currentUser = matchedUser;
+                localStorage.setItem('qyzz_user_info', JSON.stringify(currentUser));
+                showMainPage();
+            } else {
+                alert('姓名/身份/密码不匹配，或未注册！请先注册');
             }
         }
 
-        // 显示主页面
+        // 显示主页面（根据身份生成专属菜单和内容）
         function showMainPage() {
-            document.getElementById('loginPage').style.display = 'none';
-            document.getElementById('mainPage').style.display = 'block';
-            
-            const userInfo = JSON.parse(localStorage.getItem('currentUser'));
-            renderNav(userInfo);
-            renderContent(userInfo, 0);
+            // 隐藏登录页，显示主页面
+            document.getElementById('loginRegisterBox').classList.remove('active');
+            document.getElementById('infoEditBox').classList.remove('active');
+            document.getElementById('mainPage').classList.add('active');
+
+            // 设置欢迎标题
+            document.getElementById('welcomeTitle').innerText = 
+                `欢迎${getRoleName(currentUser.role)}【${currentUser.name}】登录青云宗管理系统`;
+
+            // 生成对应身份的菜单
+            generateRoleMenu();
+
+            // 默认显示第一个内容
+            showRoleContent(1);
         }
 
-        // 渲染导航栏
-        function renderNav(userInfo) {
-            const nav = document.getElementById('mainNav');
-            nav.innerHTML = '';
-            let navItems = [];
+        // 根据身份生成专属菜单
+        function generateRoleMenu() {
+            const menuBar = document.getElementById('menuBar');
+            menuBar.innerHTML = ''; // 清空原有菜单
 
-            // 根据身份渲染不同导航
-            if (userInfo.isAdmin) {
-                const topAdmins = JSON.parse(localStorage.getItem('topAdmins'));
-                if (topAdmins.includes(userInfo.identity)) {
-                    // 最高权限管理员
-                    navItems = ['宗训门规', '成员管理', '贡献点商城上传'];
-                } else if (userInfo.identity === '任务堂执事') {
-                    // 任务堂执事
-                    navItems = ['宗训门规', '任务审核', '任务发布'];
-                } else if (userInfo.identity === '贡献堂执事') {
-                    // 贡献堂执事
-                    navItems = ['宗训门规', '贡献点查看', '贡献堂商城', '贡献点兑换审核'];
-                } else {
-                    // 其他管理员
-                    navItems = ['宗训门规', '任务发布', '贡献点查看'];
-                }
-            } else {
-                // 普通用户
-                navItems = ['宗训门规', '任务接取', '任务进行中', '贡献点查看', '贡献点商城', '背包'];
+            if (currentUser.role === 'master') {
+                // 宗主菜单
+                menuBar.innerHTML = `
+                    <button onclick="showRoleContent(1)">宗训门规管理</button>
+                    <button onclick="showRoleContent(2)">所有成员信息</button>
+                `;
+                // 加载所有成员信息
+                loadAllMemberList();
+            } else if (currentUser.role === 'elder') {
+                // 长老菜单
+                menuBar.innerHTML = `
+                    <button onclick="showRoleContent(1)">宗训门规查看</button>
+                    <button onclick="showRoleContent(2)">个人信息与弟子管理</button>
+                `;
+                // 加载长老个人信息和弟子数量
+                loadElderInfo();
+                loadDiscipleCount();
+                // 检查是否能修改信息
+                checkEditPermission('elderEditBtn');
+            } else if (currentUser.role === 'disciple') {
+                // 弟子菜单
+                menuBar.innerHTML = `
+                    <button onclick="showRoleContent(1)">宗训门规学习</button>
+                    <button onclick="showRoleContent(2)">个人信息与任务</button>
+                `;
+                // 加载弟子个人信息
+                loadDiscipleInfo();
+                // 检查是否能修改信息
+                checkEditPermission('discipleEditBtn');
             }
+        }
 
-            // 生成导航项
-            navItems.forEach((item, index) => {
-                const navItem = document.createElement('div');
-                navItem.className = `nav-item ${index === 0 ? 'active' : ''}`;
-                navItem.innerText = item;
-                navItem.onclick = () => renderContent(userInfo, index);
-                nav.appendChild(navItem);
+        // 显示对应身份的内容（严格权限控制）
+        function showRoleContent(index) {
+            // 先隐藏所有内容
+            hideAllContents();
+
+            // 根据身份和索引显示对应内容
+            if (currentUser.role === 'master') {
+                if (index === 1) {
+                    document.getElementById('masterContent1').classList.add('active');
+                } else if (index === 2) {
+                    document.getElementById('masterContent2').classList.add('active');
+                } else {
+                    document.getElementById('noPermissionContent').classList.add('active');
+                }
+            } else if (currentUser.role === 'elder') {
+                if (index === 1) {
+                    document.getElementById('elderContent1').classList.add('active');
+                } else if (index === 2) {
+                    document.getElementById('elderContent2').classList.add('active');
+                } else {
+                    document.getElementById('noPermissionContent').classList.add('active');
+                }
+            } else if (currentUser.role === 'disciple') {
+                if (index === 1) {
+                    document.getElementById('discipleContent1').classList.add('active');
+                } else if (index === 2) {
+                    document.getElementById('discipleContent2').classList.add('active');
+                } else {
+                    document.getElementById('noPermissionContent').classList.add('active');
+                }
+            }
+        }
+
+        // 隐藏所有内容
+        function hideAllContents() {
+            const contents = [
+                'masterContent1', 'masterContent2',
+                'elderContent1', 'elderContent2',
+                'discipleContent1', 'discipleContent2',
+                'noPermissionContent'
+            ];
+            contents.forEach(id => {
+                document.getElementById(id).classList.remove('active');
             });
         }
 
-        // 渲染内容区域
-        function renderContent(userInfo, pageIndex) {
-            const content = document.getElementById('mainContent');
-            const navItems = document.querySelectorAll('.nav-item');
-            
-            // 切换导航激活状态
-            navItems.forEach((item, idx) => {
-                item.classList.toggle('active', idx === pageIndex);
-            });
+        // 加载所有成员列表（宗主专属：可修改他人信息）
+        function loadAllMemberList() {
+            const memberList = document.getElementById('allMemberList');
+            const registeredUsers = JSON.parse(localStorage.getItem('qyzz_registered_users')) || [];
 
-            // 根据身份和页面索引渲染内容
-            if (userInfo.isAdmin) {
-                const topAdmins = JSON.parse(localStorage.getItem('topAdmins'));
-                if (topAdmins.includes(userInfo.identity)) {
-                    // 最高权限管理员页面
-                    switch(pageIndex) {
-                        case 0: renderZongxunPage(true); break; // 可编辑
-                        case 1: renderMemberManagePage(); break;
-                        case 2: renderShopUploadPage(); break;
-                    }
-                } else if (userInfo.identity === '任务堂执事') {
-                    // 任务堂执事页面
-                    switch(pageIndex) {
-                        case 0: renderZongxunPage(false); break; // 不可编辑
-                        case 1: renderTaskAuditPage(); break;
-                        case 2: renderTaskPublishPage(); break;
-                    }
-                } else if (userInfo.identity === '贡献堂执事') {
-                    // 贡献堂执事页面
-                    switch(pageIndex) {
-                        case 0: renderZongxunPage(false); break;
-                        case 1: renderPointsViewPage(true); break; // 查看所有人
-                        case 2: renderShopViewPage('admin'); break;
-                        case 3: renderPointsExchangeAuditPage(); break;
-                    }
-                } else {
-                    // 其他管理员页面
-                    switch(pageIndex) {
-                        case 0: renderZongxunPage(false); break;
-                        case 1: renderTaskReleasePage(); break;
-                        case 2: renderPointsViewPage(true); break;
-                    }
-                }
-            } else {
-                // 普通用户页面
-                switch(pageIndex) {
-                    case 0: renderZongxunPage(false); break;
-                    case 1: renderUserTaskTakePage(); break;
-                    case 2: renderUserTaskDoingPage(); break;
-                    case 3: renderPointsViewPage(false); break; // 只看普通用户
-                    case 4: renderShopViewPage('user'); break;
-                    case 5: renderUserBackpackPage(); break;
-                }
-            }
-        }
-
-        // 渲染宗训门规页面
-        function renderZongxunPage(canEdit) {
-            const content = document.getElementById('mainContent');
-            const zongxun = localStorage.getItem('zongxun');
-            const mengui = localStorage.getItem('mengui');
-
-            content.innerHTML = `
-                <div class="form-item" style="margin-bottom: 20px;">
-                    <label>青云宗宗训</label>
-                    <textarea id="zongxunText" rows="4" ${canEdit ? '' : 'disabled'}>${zongxun}</textarea>
-                </div>
-                <div class="form-item">
-                    <label>青云宗门规</label>
-                    <textarea id="menguiText" rows="6" ${canEdit ? '' : 'disabled'}>${mengui}</textarea>
-                </div>
-                ${canEdit ? '<button class="btn" style="margin-top: 15px;" onclick="saveZongxunMengui()">保存修改</button>' : ''}
-            `;
-        }
-
-        // 保存宗训门规
-        function saveZongxunMengui() {
-            const zongxun = document.getElementById('zongxunText').value;
-            const mengui = document.getElementById('menguiText').value;
-            localStorage.setItem('zongxun', zongxun);
-            localStorage.setItem('mengui', mengui);
-            alert('修改保存成功！');
-        }
-
-        // 渲染成员管理页面（最高权限）
-        function renderMemberManagePage() {
-            const content = document.getElementById('mainContent');
-            const members = JSON.parse(localStorage.getItem('members'));
-            
-            let html = '<h4 style="margin-bottom: 15px;">所有成员信息</h4>';
-            if (members.length === 0) {
-                html += '<p>暂无成员信息</p>';
-            } else {
-                members.forEach((member, index) => {
-                    html += `
-                        <div class="list-item">
-                            <div class="flex-between">
-                                <h5>${member.name}（${member.identity}）</h5>
-                                <button class="btn btn-small btn-danger" onclick="deleteMember(${index})">注销</button>
-                            </div>
-                            <div class="form-item" style="margin-top: 10px;">
-                                <label>年龄</label>
-                                <input type="text" id="age_${index}" value="${member.age || ''}" placeholder="请输入年龄">
-                            </div>
-                            <div class="form-item">
-                                <label>境界</label>
-                                <input type="text" id="realm_${index}" value="${member.realm || ''}" placeholder="请输入境界">
-                            </div>
-                            <div class="form-item">
-                                <label>贡献点</label>
-                                <input type="number" id="points_${index}" value="${member.points}" placeholder="请输入贡献点">
-                            </div>
-                            <div class="form-item">
-                                <label>
-                                    <input type="checkbox" id="forbid_${index}" ${member.forbiddenTask ? 'checked' : ''}> 
-                                    禁止接取任务
-                                </label>
-                            </div>
-                            <button class="btn btn-small" style="margin-top: 10px;" onclick="saveMember(${index})">保存修改</button>
-                        </div>
-                    `;
-                });
-            }
-            content.innerHTML = html;
-        }
-
-        // 保存成员信息修改
-        function saveMember(index) {
-            let members = JSON.parse(localStorage.getItem('members'));
-            const member = members[index];
-            member.age = document.getElementById(`age_${index}`).value;
-            member.realm = document.getElementById(`realm_${index}`).value;
-            member.points = Number(document.getElementById(`points_${index}`).value);
-            member.forbiddenTask = document.getElementById(`forbid_${index}`).checked;
-            
-            // 如果是当前登录用户，同步更新
-            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-            if (currentUser.name === member.name && currentUser.identity === member.identity) {
-                currentUser.age = member.age;
-                currentUser.realm = member.realm;
-                currentUser.points = member.points;
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            }
-
-            localStorage.setItem('members', JSON.stringify(members));
-            alert('修改保存成功！');
-            renderMemberManagePage();
-        }
-
-        // 注销成员
-        function deleteMember(index) {
-            if (confirm('确定要注销该成员吗？')) {
-                let members = JSON.parse(localStorage.getItem('members'));
-                members.splice(index, 1);
-                localStorage.setItem('members', JSON.stringify(members));
-                alert('注销成功！');
-                renderMemberManagePage();
-            }
-        }
-
-        // 渲染贡献点商城上传页面
-        function renderShopUploadPage() {
-            const content = document.getElementById('mainContent');
-            content.innerHTML = `
-                <h4 style="margin-bottom: 15px;">贡献点商城物品上传</h4>
-                <div class="form-item">
-                    <label>物品名称</label>
-                    <input type="text" id="shopItemName" placeholder="请输入物品名称">
-                </div>
-                <div class="form-item">
-                    <label>物品描述</label>
-                    <textarea id="shopItemDesc" rows="3" placeholder="请输入物品描述"></textarea>
-                </div>
-                <div class="form-item">
-                    <label>物品数量</label>
-                    <input type="number" id="shopItemCount" placeholder="请输入物品数量" min="1">
-                </div>
-                <div class="form-item">
-                    <label>所需贡献点</label>
-                    <input type="number" id="shopItemPoints" placeholder="请输入所需贡献点" min="1">
-                </div>
-                <button class="btn" onclick="uploadShopItem()">上传物品</button>
-                <hr style="margin: 20px 0;">
-                <h4 style="margin-bottom: 15px;">已上传物品</h4>
-                <div id="shopItemsList"></div>
-            `;
-            renderShopItemsList();
-        }
-
-        // 上传商城物品
-        function uploadShopItem() {
-            const name = document.getElementById('shopItemName').value.trim();
-            const desc = document.getElementById('shopItemDesc').value.trim();
-            const count = Number(document.getElementById('shopItemCount').value);
-            const points = Number(document.getElementById('shopItemPoints').value);
-
-            if (!name || !desc || isNaN(count) || count < 1 || isNaN(points) || points < 1) {
-                alert('请填写完整且有效的物品信息！');
-                return;
-            }
-
-            let shopItems = JSON.parse(localStorage.getItem('shopItems'));
-            shopItems.push({ name, desc, count, points, remain: count });
-            localStorage.setItem('shopItems', JSON.stringify(shopItems));
-            
-            // 清空表单
-            document.getElementById('shopItemName').value = '';
-            document.getElementById('shopItemDesc').value = '';
-            document.getElementById('shopItemCount').value = '';
-            document.getElementById('shopItemPoints').value = '';
-
-            alert('物品上传成功！');
-            renderShopItemsList();
-        }
-
-        // 渲染商城物品列表
-        function renderShopItemsList() {
-            const list = document.getElementById('shopItemsList');
-            const shopItems = JSON.parse(localStorage.getItem('shopItems'));
-            
-            if (shopItems.length === 0) {
-                list.innerHTML = '<p>暂无上传物品</p>';
+            if (registeredUsers.length === 0) {
+                memberList.innerHTML = '<p class="permission-tip">暂无注册成员</p>';
                 return;
             }
 
             let html = '';
-            shopItems.forEach((item, index) => {
+            registeredUsers.forEach((user, index) => {
                 html += `
-                    <div class="list-item">
-                        <h5>${item.name}</h5>
-                        <p>描述：${item.desc}</p>
-                        <p>总数：${item.count} | 剩余：${item.remain} | 所需贡献点：${item.points}</p>
-                        <button class="btn btn-small btn-danger" onclick="deleteShopItem(${index})">删除</button>
+                    <div class="member-item">
+                        <p>序号：${index + 1}</p>
+                        <p>姓名：${user.name}</p>
+                        <p>身份：${getRoleName(user.role)}</p>
+                        <p>注册时间：${user.registerTime}</p>
+                        <p>昵称：${user.nickname || '未设置'}</p>
+                        <p>年龄：${user.age || '未设置'}</p>
+                        <p>修为：${user.cultivation || '未设置'}</p>
+                        ${user.role === 'disciple' ? `<p>宗门贡献：${user.score}</p>` : ''}
+                        <button class="edit-btn" onclick="showEditBox('${user.name}', '${user.role}')">修改该成员信息</button>
                     </div>
                 `;
             });
-            list.innerHTML = html;
+            memberList.innerHTML = html;
         }
 
-        // 删除商城物品
-        function deleteShopItem(index) {
-            if (confirm('确定要删除该物品吗？')) {
-                let shopItems = JSON.parse(localStorage.getItem('shopItems'));
-                shopItems.splice(index, 1);
-                localStorage.setItem('shopItems', JSON.stringify(shopItems));
-                renderShopItemsList();
-            }
-        }
-
-        // 渲染任务审核页面（任务堂执事）
-        function renderTaskAuditPage() {
-            const content = document.getElementById('mainContent');
-            const tasks = JSON.parse(localStorage.getItem('tasks')).filter(t => t.status === 'pending');
-            
-            let html = '<h4 style="margin-bottom: 15px;">待审核任务</h4>';
-            if (tasks.length === 0) {
-                html += '<p>暂无待审核任务</p>';
-            } else {
-                tasks.forEach((task, index) => {
-                    html += `
-                        <div class="list-item">
-                            <h5>${task.name}（发布人：${task.publisher}）</h5>
-                            <p>描述：${task.desc}</p>
-                            <p>所需人数：${task.people} | 所需时间：${task.time}分钟 | 总贡献点：${task.points}</p>
-                            <div class="form-item" style="margin-top: 10px;">
-                                <label>审核意见（拒绝时填写）</label>
-                                <textarea id="auditReason_${index}" rows="2" placeholder="请输入审核意见"></textarea>
-                            </div>
-                            <div style="display: flex; gap: 10px; margin-top: 10px;">
-                                <button class="btn btn-small btn-success" onclick="auditTask(${index}, 'pass')">通过</button>
-                                <button class="btn btn-small btn-danger" onclick="auditTask(${index}, 'reject')">拒绝</button>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
-            content.innerHTML = html;
-        }
-
-        // 审核任务
-        function auditTask(index, result) {
-            let tasks = JSON.parse(localStorage.getItem('tasks'));
-            const pendingTasks = tasks.filter(t => t.status === 'pending');
-            const task = pendingTasks[index];
-            
-            if (result === 'pass') {
-                // 审核通过
-                task.status = 'audited';
-                alert('审核通过！');
-            } else {
-                // 审核拒绝
-                const reason = document.getElementById(`auditReason_${index}`).value.trim();
-                if (!reason) {
-                    alert('请填写拒绝理由！');
-                    return;
-                }
-                task.status = 'rejected';
-                task.rejectReason = reason;
-                alert('审核拒绝，任务已退回！');
-            }
-
-            // 更新任务列表
-            const taskIndex = tasks.findIndex(t => t.name === task.name && t.publisher === task.publisher);
-            tasks[taskIndex] = task;
-            localStorage.setItem('tasks', JSON.stringify(tasks));
-            
-            renderTaskAuditPage();
-        }
-
-        // 渲染任务发布页面（任务堂执事）
-        function renderTaskPublishPage() {
-            const content = document.getElementById('mainContent');
-            const tasks = JSON.parse(localStorage.getItem('tasks')).filter(t => t.status === 'audited');
-            
-            let html = '<h4 style="margin-bottom: 15px;">待发布任务</h4>';
-            if (tasks.length === 0) {
-                html += '<p>暂无待发布任务</p>';
-            } else {
-                tasks.forEach((task, index) => {
-                    html += `
-                        <div class="list-item">
-                            <h5>${task.name}</h5>
-                            <p>描述：${task.desc}</p>
-                            <p>所需人数：${task.people} | 所需时间：${task.time}分钟 | 总贡献点：${task.points}</p>
-                            <button class="btn btn-small btn-success" onclick="publishTask(${index})">发布任务</button>
-                        </div>
-                    `;
-                });
-            }
-            content.innerHTML = html;
-        }
-
-        // 发布任务
-        function publishTask(index) {
-            let tasks = JSON.parse(localStorage.getItem('tasks'));
-            const auditedTasks = tasks.filter(t => t.status === 'audited');
-            const task = auditedTasks[index];
-            
-            task.status = 'published';
-            task.publishTime = new Date().getTime();
-
-            // 更新任务列表
-            const taskIndex = tasks.findIndex(t => t.name === task.name && t.publisher === task.publisher);
-            tasks[taskIndex] = task;
-            localStorage.setItem('tasks', JSON.stringify(tasks));
-            
-            alert('任务发布成功！');
-            renderTaskPublishPage();
-        }
-
-        // 渲染任务发布页面（其他管理员）
-        function renderTaskReleasePage() {
-            const content = document.getElementById('mainContent');
-            const userInfo = JSON.parse(localStorage.getItem('currentUser'));
-            const tasks = JSON.parse(localStorage.getItem('tasks')).filter(t => t.publisher === userInfo.name);
-            
-            content.innerHTML = `
-                <h4 style="margin-bottom: 15px;">发布新任务</h4>
-                <div class="form-item">
-                    <label>任务名称</label>
-                    <input type="text" id="taskName" placeholder="请输入任务名称">
-                </div>
-                <div class="form-item">
-                    <label>任务描述</label>
-                    <textarea id="taskDesc" rows="3" placeholder="请输入任务描述"></textarea>
-                </div>
-                <div class="form-item">
-                    <label>所需人数</label>
-                    <input type="number" id="taskPeople" placeholder="请输入所需人数" min="1">
-                </div>
-                <div class="form-item">
-                    <label>所需时间（分钟）</label>
-                    <input type="number" id="taskTime" placeholder="请输入所需时间" min="1">
-                </div>
-                <div class="form-item">
-                    <label>总贡献点</label>
-                    <input type="number" id="taskPoints" placeholder="请输入总贡献点" min="1">
-                </div>
-                <button class="btn" onclick="releaseTask()">提交审核</button>
-                <hr style="margin: 20px 0;">
-                <h4 style="margin-bottom: 15px;">我发布的任务</h4>
-                <div id="myTasksList"></div>
-            `;
-            renderMyTasksList();
-        }
-
-        // 提交任务审核
-        function releaseTask() {
-            const userInfo = JSON.parse(localStorage.getItem('currentUser'));
-            const name = document.getElementById('taskName').value.trim();
-            const desc = document.getElementById('taskDesc').value.trim();
-            const people = Number(document.getElementById('taskPeople').value);
-            const time = Number(document.getElementById('taskTime').value);
-            const points = Number(document.getElementById('taskPoints').value);
-
-            if (!name || !desc || isNaN(people) || people < 1 || isNaN(time) || time < 1 || isNaN(points) || points < 1) {
-                alert('请填写完整且有效的任务信息！');
-                return;
-            }
-
-            let tasks = JSON.parse(localStorage.getItem('tasks'));
-            tasks.push({
-                name,
-                desc,
-                people,
-                time,
-                points,
-                publisher: userInfo.name,
-                status: 'pending', // pending-待审核, audited-审核通过待发布, published-已发布, rejected-已拒绝
-                rejectReason: ''
-            });
-            localStorage.setItem('tasks', JSON.stringify(tasks));
-            
-            // 清空表单
-            document.getElementById('taskName').value = '';
-            document.getElementById('taskDesc').value = '';
-            document.getElementById('taskPeople').value = '';
-            document.getElementById('taskTime').value = '';
-            document.getElementById('taskPoints').value = '';
-
-            alert('任务提交审核成功！请等待任务堂执事审核');
-            renderMyTasksList();
-        }
-
-        // 渲染我发布的任务列表
-        function renderMyTasksList() {
-            const list = document.getElementById('myTasksList');
-            const userInfo = JSON.parse(localStorage.getItem('currentUser'));
-            const tasks = JSON.parse(localStorage.getItem('tasks')).filter(t => t.publisher === userInfo.name);
-            
-            if (tasks.length === 0) {
-                list.innerHTML = '<p>暂无发布任务</p>';
-                return;
-            }
-
-            let html = '';
-            tasks.forEach((task, index) => {
-                let statusText = '';
-                switch(task.status) {
-                    case 'pending': statusText = '待审核'; break;
-                    case 'audited': statusText = '审核通过（待发布）'; break;
-                    case 'published': statusText = '已发布'; break;
-                    case 'rejected': statusText = `已拒绝：${task.rejectReason}`; break;
-                }
-                html += `
-                    <div class="list-item">
-                        <h5>${task.name}</h5>
-                        <p>状态：${statusText}</p>
-                        <p>描述：${task.desc}</p>
-                        <p>所需人数：${task.people} | 所需时间：${task.time}分钟 | 总贡献点：${task.points}</p>
-                    </div>
-                `;
-            });
-            list.innerHTML = html;
-        }
-
-        // 渲染贡献点查看页面
-        function renderPointsViewPage(showAll) {
-            const content = document.getElementById('mainContent');
-            let members = JSON.parse(localStorage.getItem('members'));
-            
-            // 普通用户只看普通用户，管理员看所有人
-            if (!showAll) {
-                members = members.filter(m => !m.isAdmin);
-                // 按贡献点降序排列
-                members.sort((a, b) => b.points - a.points);
-            }
-            
-            let html = '<h4 style="margin-bottom: 15px;">贡献点查看</h4>';
-            if (members.length === 0) {
-                html += '<p>暂无成员信息</p>';
-            } else {
-                members.forEach(member => {
-                    html += `
-                        <div class="list-item">
-                            <h5>${member.name}（${member.identity}）</h5>
-                            <p>境界：${member.realm || '未填写'}</p>
-                            <p>贡献点：${member.points}</p>
-                        </div>
-                    `;
-                });
-            }
-            content.innerHTML = html;
-        }
-
-        // 渲染贡献堂商城页面（贡献堂执事）
-        function renderShopViewPage(type) {
-            const content = document.getElementById('mainContent');
-            const shopItems = JSON.parse(localStorage.getItem('shopItems'));
-            
-            let html = `<h4 style="margin-bottom: 15px;">${type === 'admin' ? '贡献堂商城' : '贡献点商城'}</h4>`;
-            if (shopItems.length === 0) {
-                html += '<p>暂无商城物品</p>';
-            } else {
-                shopItems.forEach((item, index) => {
-                    if (type === 'user') {
-                        // 普通用户可兑换
-                        html += `
-                            <div class="list-item">
-                                <h5>${item.name}</h5>
-                                <p>描述：${item.desc}</p>
-                                <p>剩余数量：${item.remain} | 所需贡献点：${item.points}</p>
-                                <div class="form-item" style="margin-top: 10px;">
-                                    <label>兑换数量</label>
-                                    <input type="number" id="exchangeCount_${index}" placeholder="请输入兑换数量" min="1" max="${item.remain}">
-                                </div>
-                                <button class="btn btn-small" style="margin-top: 10px;" onclick="exchangeShopItem(${index})">兑换</button>
-                            </div>
-                        `;
-                    } else {
-                        // 贡献堂执事仅查看
-                        html += `
-                            <div class="list-item">
-                                <h5>${item.name}</h5>
-                                <p>描述：${item.desc}</p>
-                                <p>总数：${item.count} | 剩余：${item.remain} | 所需贡献点：${item.points}</p>
-                            </div>
-                        `;
-                    }
-                });
-            }
-            content.innerHTML = html;
-        }
-
-        // 渲染贡献点兑换审核页面（贡献堂执事）
-        function renderPointsExchangeAuditPage() {
-            const content = document.getElementById('mainContent');
-            // 此处简化，实际应存储兑换申请记录，这里仅做演示
-            content.innerHTML = `
-                <h4 style="margin-bottom: 15px;">贡献点兑换审核</h4>
-                <p>该功能需结合兑换申请记录实现，当前为演示版本，暂未开放完整功能</p>
-                <p>用户兑换物品后，申请会出现在此页面，审核通过后物品将发放至用户背包</p>
+        // 加载长老个人信息
+        function loadElderInfo() {
+            const elderInfo = document.getElementById('elderInfo');
+            elderInfo.innerHTML = `
+                <p>姓名：${currentUser.name}</p>
+                <p>身份：长老</p>
+                <p>昵称：${currentUser.nickname || '未设置'}</p>
+                <p>年龄：${currentUser.age || '未设置'}</p>
+                <p>修为：${currentUser.cultivation || '未设置'}</p>
+                <p>注册时间：${currentUser.registerTime}</p>
             `;
         }
 
-        // 渲染用户任务接取页面
-        function renderUserTaskTakePage() {
-            const content = document.getElementById('mainContent');
-            const userInfo = JSON.parse(localStorage.getItem('currentUser'));
-            const members = JSON.parse(localStorage.getItem('members'));
-            const currentMember = members.find(m => m.name === userInfo.name && m.identity === userInfo.identity);
-            
-            // 检查是否被禁止接取任务
-            if (currentMember && currentMember.forbiddenTask) {
-                content.innerHTML = '<p style="color: red; font-size: 16px;">你已被禁止接取任务，无法查看任务列表！</p>';
-                return;
-            }
-
-            const tasks = JSON.parse(localStorage.getItem('tasks')).filter(t => t.status === 'published');
-            
-            let html = '<h4 style="margin-bottom: 15px;">可接取任务</h4>';
-            if (tasks.length === 0) {
-                html += '<p>暂无可接取任务</p>';
-            } else {
-                tasks.forEach((task, index) => {
-                    html += `
-                        <div class="list-item">
-                            <h5>${task.name}</h5>
-                            <p>描述：${task.desc}</p>
-                            <p>所需人数：${task.people} | 所需时间：${task.time}分钟 | 每人贡献点：${Math.floor(task.points / task.people)}</p>
-                            <button class="btn btn-small btn-success" onclick="takeTask(${index})">接取任务</button>
-                        </div>
-                    `;
-                });
-            }
-            content.innerHTML = html;
+        // 统计弟子数量（长老专属）
+        function loadDiscipleCount() {
+            const registeredUsers = JSON.parse(localStorage.getItem('qyzz_registered_users')) || [];
+            const discipleCount = registeredUsers.filter(user => user.role === 'disciple').length;
+            document.getElementById('discipleCount').innerText = discipleCount;
         }
 
-        // 接取任务
-        function takeTask(index) {
-            const userInfo = JSON.parse(localStorage.getItem('currentUser'));
-            const tasks = JSON.parse(localStorage.getItem('tasks')).filter(t => t.status === 'published');
-            const task = tasks[index];
-
-            // 检查是否已有进行中的任务
-            const doingTasks = JSON.parse(localStorage.getItem('userDoingTasks')) || {};
-            if (doingTasks[userInfo.name]) {
-                alert('你已有进行中的任务，无法接取新任务！');
-                return;
-            }
-
-            // 记录进行中的任务
-            doingTasks[userInfo.name] = {
-                task,
-                startTime: new Date().getTime(),
-                remainTime: task.time * 60 * 1000 // 转换为毫秒
-            };
-            localStorage.setItem('userDoingTasks', JSON.stringify(doingTasks));
-
-            alert(`成功接取任务【${task.name}】！任务时长${task.time}分钟，完成后将获得${Math.floor(task.points / task.people)}贡献点`);
-            renderUserTaskTakePage();
-        }
-
-        // 渲染用户任务进行中页面
-        function renderUserTaskDoingPage() {
-            const content = document.getElementById('mainContent');
-            const userInfo = JSON.parse(localStorage.getItem('currentUser'));
-            const doingTasks = JSON.parse(localStorage.getItem('userDoingTasks')) || {};
-            const taskInfo = doingTasks[userInfo.name];
-
-            if (!taskInfo) {
-                content.innerHTML = '<p>暂无进行中的任务</p>';
-                return;
-            }
-
-            // 计算剩余时间
-            const now = new Date().getTime();
-            const elapsed = now - taskInfo.startTime;
-            let remainTime = taskInfo.remainTime - elapsed;
-            
-            if (remainTime <= 0) {
-                // 任务完成
-                completeTask(userInfo.name);
-                content.innerHTML = '<p>当前无进行中的任务，你有任务已自动完成，贡献点已发放！</p>';
-                return;
-            }
-
-            // 格式化剩余时间
-            const minutes = Math.floor(remainTime / (60 * 1000));
-            const seconds = Math.floor((remainTime % (60 * 1000)) / 1000);
-            const remainTimeStr = `${minutes}分${seconds}秒`;
-
-            content.innerHTML = `
-                <h4 style="margin-bottom: 15px;">进行中的任务</h4>
-                <div class="list-item">
-                    <h5>${taskInfo.task.name}</h5>
-                    <p>描述：${taskInfo.task.desc}</p>
-                    <p>剩余时间：<span style="color: red;">${remainTimeStr}</span></p>
-                    <p>完成后将获得：${Math.floor(taskInfo.task.points / taskInfo.task.people)}贡献点</p>
-                </div>
+        // 加载弟子个人信息
+        function loadDiscipleInfo() {
+            const discipleInfo = document.getElementById('discipleInfo');
+            discipleInfo.innerHTML = `
+                <p>姓名：${currentUser.name}</p>
+                <p>身份：弟子</p>
+                <p>昵称：${currentUser.nickname || '未设置'}</p>
+                <p>年龄：${currentUser.age || '未设置'}</p>
+                <p>修为：${currentUser.cultivation || '未设置'}</p>
+                <p>注册时间：${currentUser.registerTime}</p>
+                <p>当前宗门贡献：${currentUser.score}</p>
             `;
-
-            // 定时刷新
-            setTimeout(() => renderUserTaskDoingPage(), 1000);
         }
 
-        // 完成任务
-        function completeTask(userName) {
-            const doingTasks = JSON.parse(localStorage.getItem('userDoingTasks')) || {};
-            const taskInfo = doingTasks[userName];
-            if (!taskInfo) return;
+        // 检查信息修改权限
+        function checkEditPermission(btnId) {
+            const btn = document.getElementById(btnId);
+            if (currentUser.role === 'master') {
+                // 宗主无限修改
+                btn.disabled = false;
+                btn.innerText = '修改个人信息（无限次）';
+            } else {
+                if (currentUser.editCount >= 1) {
+                    // 普通用户已修改1次，锁定按钮
+                    btn.disabled = true;
+                    btn.innerText = '信息已锁定（仅可修改1次）';
+                } else {
+                    // 普通用户未修改，可修改1次
+                    btn.disabled = false;
+                }
+            }
+        }
 
-            // 计算获得的贡献点
-            const points = Math.floor(taskInfo.task.points / taskInfo.task.people);
+        // 显示信息修改界面
+        function showEditBox(targetName, targetRole) {
+            // 隐藏其他页面
+            document.getElementById('mainPage').classList.remove('active');
+            document.getElementById('infoEditBox').classList.add('active');
 
-            // 更新用户贡献点
-            let members = JSON.parse(localStorage.getItem('members'));
-            const memberIndex = members.findIndex(m => m.name === userName);
-            if (memberIndex !== -1) {
-                members[memberIndex].points += points;
-                localStorage.setItem('members', JSON.stringify(members));
-                
-                // 更新当前登录用户信息
-                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-                if (currentUser.name === userName) {
-                    currentUser.points += points;
-                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            // 区分修改自己还是他人（宗主专属）
+            if (targetName && targetRole) {
+                // 宗主修改他人
+                const registeredUsers = JSON.parse(localStorage.getItem('qyzz_registered_users')) || [];
+                editTargetUser = registeredUsers.find(u => u.name === targetName && u.role === targetRole);
+                document.getElementById('editTip').innerText = `正在修改【${targetName}】-${getRoleName(targetRole)}的信息（宗主权限：无限次）`;
+            } else {
+                // 修改自己
+                editTargetUser = currentUser;
+                if (currentUser.role === 'master') {
+                    document.getElementById('editTip').innerText = '宗主权限：无限次修改';
+                } else {
+                    document.getElementById('editTip').innerText = `普通用户仅能修改1次，当前剩余修改次数：${1 - currentUser.editCount}`;
                 }
             }
 
-            // 删除进行中的任务
-            delete doingTasks[userName];
-            localStorage.setItem('userDoingTasks', JSON.stringify(doingTasks));
-        }
-
-        // 渲染用户背包页面
-        function renderUserBackpackPage() {
-            const content = document.getElementById('mainContent');
-            const userInfo = JSON.parse(localStorage.getItem('currentUser'));
-            const backpack = JSON.parse(localStorage.getItem('userBackpack')) || {};
-            const userBackpack = backpack[userInfo.name] || {};
-
-            let html = '<h4 style="margin-bottom: 15px;">我的背包</h4>';
-            if (Object.keys(userBackpack).length === 0) {
-                html += '<p>背包为空</p>';
-            } else {
-                Object.keys(userBackpack).forEach((itemName, index) => {
-                    const item = userBackpack[itemName];
-                    html += `
-                        <div class="list-item">
-                            <h5>${itemName}</h5>
-                            <p>描述：${item.desc}</p>
-                            <p>数量：${item.count}</p>
-                            <button class="btn btn-small btn-danger" onclick="reduceBackpackItem('${itemName}')">使用/减少</button>
-                        </div>
-                    `;
-                });
-            }
-            content.innerHTML = html;
-        }
-
-        // 减少背包物品数量
-        function reduceBackpackItem(itemName) {
-            const userInfo = JSON.parse(localStorage.getItem('currentUser'));
-            const backpack = JSON.parse(localStorage.getItem('userBackpack')) || {};
-            const userBackpack = backpack[userInfo.name] || {};
-
-            if (userBackpack[itemName]) {
-                userBackpack[itemName].count -= 1;
-                if (userBackpack[itemName].count <= 0) {
-                    delete userBackpack[itemName];
-                }
-                backpack[userInfo.name] = userBackpack;
-                localStorage.setItem('userBackpack', JSON.stringify(backpack));
-                renderUserBackpackPage();
-            }
-        }
-
-        // 兑换商城物品
-        function exchangeShopItem(index) {
-            const userInfo = JSON.parse(localStorage.getItem('currentUser'));
-            const shopItems = JSON.parse(localStorage.getItem('shopItems'));
-            const item = shopItems[index];
-            const count = Number(document.getElementById(`exchangeCount_${index}`).value);
-
-            if (isNaN(count) || count < 1 || count > item.remain) {
-                alert(`兑换数量无效！请输入1-${item.remain}之间的数字`);
-                return;
-            }
-
-            // 计算所需总贡献点
-            const totalPoints = item.points * count;
-            
-            // 检查用户贡献点
-            let members = JSON.parse(localStorage.getItem('members'));
-            const memberIndex = members.findIndex(m => m.name === userInfo.name && m.identity === userInfo.identity);
-            if (memberIndex === -1) {
-                alert('用户信息不存在！');
-                return;
-            }
-            const member = members[memberIndex];
-            if (member.points < totalPoints) {
-                alert(`贡献点不足！你当前有${member.points}贡献点，兑换需要${totalPoints}贡献点`);
-                return;
-            }
-
-            // 扣除贡献点
-            member.points -= totalPoints;
-            members[memberIndex] = member;
-            localStorage.setItem('members', JSON.stringify(members));
-            
-            // 更新当前用户信息
-            userInfo.points = member.points;
-            localStorage.setItem('currentUser', JSON.stringify(userInfo));
-
-            // 减少物品库存
-            item.remain -= count;
-            shopItems[index] = item;
-            localStorage.setItem('shopItems', JSON.stringify(shopItems));
-
-            // 添加到用户背包（简化版，实际应走审核流程）
-            const backpack = JSON.parse(localStorage.getItem('userBackpack')) || {};
-            if (!backpack[userInfo.name]) {
-                backpack[userInfo.name] = {};
-            }
-            if (backpack[userInfo.name][item.name]) {
-                backpack[userInfo.name][item.name].count += count;
-            } else {
-                backpack[userInfo.name][item.name] = {
-                    desc: item.desc,
-                    count: count
-                };
-            }
-            localStorage.setItem('userBackpack', JSON.stringify(backpack));
-
-            alert(`兑换成功！已扣除${totalPoints}贡献点，物品已发放至背包`);
-            renderShopViewPage('user');
-        }
-
-        // 打开个人信息弹窗
-        function openUserInfoModal() {
-            const userInfo = JSON.parse(localStorage.getItem('currentUser'));
-            document.getElementById('modalUserName').value = userInfo.name;
-            document.getElementById('modalUserIdentity').value = userInfo.identity;
-            document.getElementById('modalUserAge').value = userInfo.age || '';
-            document.getElementById('modalUserRealm').value = userInfo.realm || '';
-            document.getElementById('modalUserPoints').value = userInfo.points;
-            
-            document.getElementById('userInfoModal').style.display = 'flex';
-        }
-
-        // 关闭弹窗
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
+            // 填充已有信息
+            document.getElementById('editNickname').value = editTargetUser.nickname || '';
+            document.getElementById('editAge').value = editTargetUser.age || '';
+            document.getElementById('editCultivation').value = editTargetUser.cultivation || '';
         }
 
         // 保存个人信息
         function saveUserInfo() {
-            const userInfo = JSON.parse(localStorage.getItem('currentUser'));
-            const oldPwd = document.getElementById('modalOldPwd').value;
-            const newPwd = document.getElementById('modalNewPwd').value;
-            const age = document.getElementById('modalUserAge').value;
-            const realm = document.getElementById('modalUserRealm').value;
+            const nickname = document.getElementById('editNickname').value.trim();
+            const age = document.getElementById('editAge').value.trim();
+            const cultivation = document.getElementById('editCultivation').value.trim();
 
-            // 验证密码
-            if (newPwd && oldPwd !== userInfo.pwd) {
-                alert('当前密码错误！');
-                return;
+            // 更新用户信息
+            editTargetUser.nickname = nickname;
+            editTargetUser.age = age;
+            editTargetUser.cultivation = cultivation;
+
+            // 普通用户修改次数+1，超过1次锁定
+            if (editTargetUser.role !== 'master' && editTargetUser.editCount < 1) {
+                editTargetUser.editCount += 1;
             }
 
-            // 更新信息
-            userInfo.age = age;
-            userInfo.realm = realm;
-            if (newPwd) {
-                userInfo.pwd = newPwd;
-            }
-            localStorage.setItem('currentUser', JSON.stringify(userInfo));
+            // 同步到用户列表
+            let registeredUsers = JSON.parse(localStorage.getItem('qyzz_registered_users')) || [];
+            registeredUsers = registeredUsers.map(user => {
+                if (user.name === editTargetUser.name && user.role === editTargetUser.role) {
+                    return editTargetUser;
+                }
+                return user;
+            });
+            localStorage.setItem('qyzz_registered_users', JSON.stringify(registeredUsers));
 
-            // 更新成员列表
-            let members = JSON.parse(localStorage.getItem('members'));
-            const memberIndex = members.findIndex(m => m.name === userInfo.name && m.identity === userInfo.identity);
-            if (memberIndex !== -1) {
-                members[memberIndex].age = age;
-                members[memberIndex].realm = realm;
-                members[memberIndex].pwd = userInfo.pwd;
-                localStorage.setItem('members', JSON.stringify(members));
+            // 如果修改的是自己，同步当前登录信息
+            if (editTargetUser.name === currentUser.name && editTargetUser.role === currentUser.role) {
+                currentUser = editTargetUser;
+                localStorage.setItem('qyzz_user_info', JSON.stringify(currentUser));
             }
 
-            alert('个人信息修改成功！');
-            closeModal('userInfoModal');
+            alert('信息保存成功！');
+            // 返回主页面
+            showMainPage();
+        }
+
+        // 取消修改
+        function cancelEdit() {
+            document.getElementById('infoEditBox').classList.remove('active');
+            document.getElementById('mainPage').classList.add('active');
+        }
+
+        // 退出登录
+        function logout() {
+            // 清除登录状态
+            localStorage.removeItem('qyzz_user_info');
+            currentUser = null;
+            editTargetUser = null;
+            // 返回登录注册页
+            showLoginRegister();
+            alert('已安全退出登录！');
+        }
+
+        // 显示登录注册页
+        function showLoginRegister() {
+            document.getElementById('loginRegisterBox').classList.add('active');
+            document.getElementById('infoEditBox').classList.remove('active');
+            document.getElementById('mainPage').classList.remove('active');
+            // 清空输入框
+            document.getElementById('userName').value = '';
+            document.getElementById('userPassword').value = '';
+        }
+
+        // 辅助函数：转换身份名称
+        function getRoleName(role) {
+            const roleMap = {
+                master: '宗主',
+                elder: '长老',
+                disciple: '弟子'
+            };
+            return roleMap[role] || '未知身份';
         }
     </script>
 </body>
