@@ -3,2438 +3,693 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>修仙宗门管理系统</title>
-    <!-- Tailwind CSS v3 -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome -->
-    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'dark-green': '#0f4d3c',
-                        'medium-green': '#1e7c5e',
-                        'light-green': '#4caf50',
-                        'pale-green': '#e8f5e9',
-                        'gold': '#ffd700',
-                        'silver': '#c0c0c0',
-                        'bronze': '#cd7f32'
-                    },
-                    fontFamily: {
-                        sans: ['Arial', 'sans-serif'],
-                    },
-                    boxShadow: {
-                        'inner-lg': 'inset 0 2px 10px 0 rgba(0, 0, 0, 0.15)',
-                        'glow': '0 0 15px rgba(76, 175, 80, 0.5)',
-                    }
-                }
-            }
-        }
-    </script>
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .text-shadow {
-                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-            }
-            .bg-ancient {
-                background-image: url('https://img.freepik.com/free-vector/chinese-watercolor-background_52683-69445.jpg');
-                background-size: cover;
-                background-position: center;
-            }
-            .transition-all-300 {
-                transition: all 0.3s ease;
-            }
-            .scrollbar-hidden::-webkit-scrollbar {
-                display: none;
-            }
-            .scrollbar-hidden {
-                -ms-overflow-style: none;
-                scrollbar-width: none;
-            }
-        }
-    </style>
+    <title>青云宗管理系统</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #0f4d3c;
-            background-image: url('https://img.freepik.com/free-vector/chinese-watercolor-background_52683-69445.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            background: linear-gradient(135deg, #1a2a6c, #2c3e50);
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
         }
-        
-        .login-container {
-            background-color: rgba(76, 175, 80, 0.9);
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.7);
             border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(8px);
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
         }
-        
-        .form-input {
-            background-color: rgba(255, 255, 255, 0.8);
-            border: 2px solid #1e7c5e;
-            border-radius: 8px;
-            transition: all 0.3s ease;
+        h1, h2, h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff;
         }
-        
-        .form-input:focus {
-            border-color: #ffd700;
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-            outline: none;
-        }
-        
-        .btn-primary {
-            background-color: #1e7c5e;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 12px 24px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-primary:hover {
-            background-color: #0f4d3c;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-        
-        .btn-secondary {
-            background-color: #ffd700;
-            color: #0f4d3c;
-            border: none;
-            border-radius: 8px;
-            padding: 12px 24px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-secondary:hover {
-            background-color: #e6c200;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-        
-        .tab-active {
-            background-color: #1e7c5e;
-            color: white;
-            border-radius: 8px 8px 0 0;
-        }
-        
-        .page-container {
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(8px);
-        }
-        
-        .nav-item {
-            transition: all 0.3s ease;
-        }
-        
-        .nav-item:hover {
-            background-color: rgba(30, 124, 94, 0.2);
-        }
-        
-        .nav-item.active {
-            background-color: #1e7c5e;
-            color: white;
-        }
-        
-        .card {
-            background-color: white;
+        .login-box, .main-menu, .admin-panel, .user-panel, .task-panel, .shop-panel, .member-panel {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(25, 42, 86, 0.8);
             border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
+            border: 1px solid #00ffff;
         }
-        
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-        }
-        
-        .task-card {
-            border-left: 4px solid #1e7c5e;
-        }
-        
-        .task-card.active {
-            border-left-color: #ffd700;
-            background-color: #fff9e6;
-        }
-        
-        .item-card {
-            border-top: 4px solid #1e7c5e;
-        }
-        
-        .btn-small {
-            padding: 6px 12px;
-            font-size: 0.875rem;
-            border-radius: 6px;
-        }
-        
-        .btn-success {
-            background-color: #4caf50;
-            color: white;
-        }
-        
-        .btn-warning {
-            background-color: #ff9800;
-            color: white;
-        }
-        
-        .btn-danger {
-            background-color: #f44336;
-            color: white;
-        }
-        
-        .btn-info {
-            background-color: #2196f3;
-            color: white;
-        }
-        
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 12px 24px;
-            border-radius: 8px;
-            color: white;
-            font-weight: bold;
-            z-index: 1000;
-            opacity: 0;
-            transform: translateY(-20px);
-            transition: all 0.3s ease;
-        }
-        
-        .toast.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .toast.success {
-            background-color: #4caf50;
-        }
-        
-        .toast.error {
-            background-color: #f44336;
-        }
-        
-        .toast.info {
-            background-color: #2196f3;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
+        input, select, textarea {
             width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            backdrop-filter: blur(4px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #00ffff;
+            border-radius: 5px;
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            font-size: 16px;
         }
-        
-        .modal-content {
-            background-color: white;
-            border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            max-width: 90%;
-            width: 500px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            animation: modalSlideIn 0.3s ease;
-        }
-        
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: translate(-50%, -60%);
-            }
-            to {
-                opacity: 1;
-                transform: translate(-50%, -50%);
-            }
-        }
-        
-        .rank-gold {
-            background: linear-gradient(135deg, #ffd700, #ffed4e);
-            color: #8b6914;
-        }
-        
-        .rank-silver {
-            background: linear-gradient(135deg, #c0c0c0, #e0e0e0);
-            color: #4a4a4a;
-        }
-        
-        .rank-bronze {
-            background: linear-gradient(135deg, #cd7f32, #d4a76a);
-            color: #7d4e1f;
-        }
-        
-        .progress-bar {
-            height: 8px;
-            background-color: #e0e0e0;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #4caf50, #8bc34a);
-            border-radius: 4px;
-            transition: width 0.5s ease;
-        }
-        
-        .countdown {
-            font-family: 'Courier New', monospace;
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(to right, #00ffff, #008080);
+            border: none;
+            border-radius: 5px;
+            color: #000;
+            font-size: 18px;
             font-weight: bold;
-            color: #f44336;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: all 0.3s;
         }
-        
-        @media (max-width: 640px) {
-            .login-container {
-                margin: 10px;
-                padding: 20px;
-            }
-            
-            .modal-content {
-                width: 95%;
-                margin: 10px;
-            }
+        button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 15px #00ffff;
+        }
+        .hidden {
+            display: none;
+        }
+        .task-item, .member-item, .shop-item {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 5px solid #00ffff;
+        }
+        .task-item h4, .member-item h4, .shop-item h4 {
+            color: #ffff00;
+            margin-bottom: 5px;
+        }
+        .task-item p, .member-item p, .shop-item p {
+            margin: 5px 0;
+        }
+        .error {
+            color: #ff4444;
+            text-align: center;
+            margin: 10px 0;
+        }
+        .success {
+            color: #00ff00;
+            text-align: center;
+            margin: 10px 0;
+        }
+        .logout-btn {
+            background: linear-gradient(to right, #ff4444, #800000);
+            color: #fff;
+        }
+        .tab-buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        .tab-btn {
+            width: 30%;
+            padding: 10px;
+        }
+        .tab-btn.active {
+            background: linear-gradient(to right, #ffff00, #808000);
         }
     </style>
 </head>
-<body class="min-h-screen">
-    <!-- 登录页面 -->
-    <div id="login-page" class="min-h-screen flex items-center justify-center p-4">
-        <div class="login-container w-full max-w-md p-8">
-            <div class="text-center mb-8">
-                <h1 class="text-4xl font-bold text-dark-green text-shadow">修仙宗门管理系统</h1>
-                <p class="text-dark-green mt-2">登入宗门，共修仙道</p>
+<body>
+    <div class="container">
+        <h1>青云宗管理系统</h1>
+        
+        <!-- 登录界面 -->
+        <div id="loginSection" class="login-box">
+            <h2>弟子登录</h2>
+            <div id="loginError" class="error hidden"></div>
+            <input type="text" id="loginUsername" placeholder="请输入用户名">
+            <input type="password" id="loginPassword" placeholder="请输入密码">
+            <button onclick="login()">登录</button>
+            <button onclick="showRegister()">注册新账号</button>
+        </div>
+
+        <!-- 注册界面 -->
+        <div id="registerSection" class="login-box hidden">
+            <h2>新弟子注册</h2>
+            <div id="registerError" class="error hidden"></div>
+            <div id="registerSuccess" class="success hidden"></div>
+            <input type="text" id="registerUsername" placeholder="请输入用户名（唯一）">
+            <input type="text" id="registerName" placeholder="请输入姓名">
+            <input type="text" id="registerIdentity" placeholder="请输入身份（如：内门弟子）">
+            <input type="password" id="registerPassword" placeholder="请输入密码">
+            <input type="password" id="registerPassword2" placeholder="请再次输入密码">
+            <button onclick="register()">注册</button>
+            <button onclick="showLogin()">返回登录</button>
+        </div>
+
+        <!-- 主菜单 -->
+        <div id="mainMenu" class="main-menu hidden">
+            <h2 id="userInfoTitle">欢迎您：<span id="currentUserName"></span>（<span id="currentUserIdentity"></span>）</h2>
+            <div id="userContribution" class="success"></div>
+            <div class="tab-buttons">
+                <button class="tab-btn" onclick="showTaskPanel()">任务大厅</button>
+                <button class="tab-btn" onclick="showShopPanel()">贡献商城</button>
+                <button class="tab-btn" onclick="showMemberPanel()">宗门成员</button>
             </div>
-            
-            <form id="login-form" class="space-y-6">
-                <div>
-                    <label for="username" class="block text-dark-green font-bold mb-2">用户名</label>
-                    <input type="text" id="username" class="form-input w-full px-4 py-3" placeholder="请输入用户名" required>
-                </div>
-                
-                <div>
-                    <label for="identity" class="block text-dark-green font-bold mb-2">身份</label>
-                    <select id="identity" class="form-input w-full px-4 py-3" required>
-                        <option value="">请选择身份</option>
-                        <option value="太上长老">太上长老</option>
-                        <option value="宗主">宗主</option>
-                        <option value="副宗主">副宗主</option>
-                        <option value="护宗长老">护宗长老</option>
-                        <option value="传功长老">传功长老</option>
-                        <option value="执法长老">执法长老</option>
-                        <option value="外务长老">外务长老</option>
-                        <option value="云栖圃药长老">云栖圃药长老</option>
-                        <option value="执法堂主">执法堂主</option>
-                        <option value="刑堂执事">刑堂执事</option>
-                        <option value="任务堂执事">任务堂执事</option>
-                        <option value="贡献堂执事">贡献堂执事</option>
-                        <option value="藏经阁看守">藏经阁看守</option>
-                        <option value="丹殿主事">丹殿主事</option>
-                        <option value="器殿主事">器殿主事</option>
-                        <option value="符殿主事">符殿主事</option>
-                        <option value="阵殿主事">阵殿主事</option>
-                        <option value="凝云谷主">凝云谷主</option>
-                        <option value="落霞岭主">落霞岭主</option>
-                        <option value="万妖岭主">万妖岭主</option>
-                        <option value="凝霜峰主">凝霜峰主</option>
-                        <option value="朝阳峰主">朝阳峰主</option>
-                        <option value="皓月峰主">皓月峰主</option>
-                        <option value="清风峰主">清风峰主</option>
-                        <option value="流霞峰主">流霞峰主</option>
-                        <option value="惊雷峰主">惊雷峰主</option>
-                        <option value="甘霖峰主">甘霖峰主</option>
-                        <option value="苍松峰主">苍松峰主</option>
-                        <option value="翠柏峰主">翠柏峰主</option>
-                        <option value="丹霞峰主">丹霞峰主</option>
-                        <option value="碧波峰主">碧波峰主</option>
-                        <option value="傲雪峰主">傲雪峰主</option>
-                        <option value="普通弟子">普通弟子</option>
-                    </select>
-                </div>
-                
-                <div>
-                    <label for="password" class="block text-dark-green font-bold mb-2">密码</label>
-                    <input type="password" id="password" class="form-input w-full px-4 py-3" placeholder="请输入密码" required>
-                </div>
-                
-                <div class="text-center">
-                    <button type="submit" class="btn-primary w-full">登录</button>
-                </div>
-            </form>
-            
-            <div class="mt-6 text-center">
-                <p class="text-dark-green">非注册用户？</p>
-                <button id="register-btn" class="btn-secondary mt-2">注册新账号</button>
+            <!-- 管理员专属按钮 -->
+            <div id="adminButtons" class="hidden">
+                <button onclick="showAdminPanel()">管理员面板</button>
             </div>
+            <button class="logout-btn" onclick="logout()">退出登录</button>
+        </div>
+
+        <!-- 管理员面板 -->
+        <div id="adminPanel" class="admin-panel hidden">
+            <h2>管理员面板</h2>
+            <h3>发布新任务</h3>
+            <input type="text" id="taskTitle" placeholder="任务名称">
+            <textarea id="taskContent" placeholder="任务详情" rows="4"></textarea>
+            <input type="number" id="taskReward" placeholder="任务贡献点奖励" min="1">
+            <button onclick="publishTask()">发布任务</button>
+
+            <h3>已发布任务管理</h3>
+            <div id="adminTaskList"></div>
+
+            <h3>成员贡献点管理</h3>
+            <input type="text" id="modifyMemberName" placeholder="成员用户名">
+            <input type="number" id="modifyContribution" placeholder="调整贡献点（正数加，负数减）">
+            <button onclick="modifyContribution()">调整贡献点</button>
+            
+            <h3>添加商城物品</h3>
+            <input type="text" id="shopItemName" placeholder="物品名称">
+            <input type="text" id="shopItemDesc" placeholder="物品描述">
+            <input type="number" id="shopItemPrice" placeholder="兑换所需贡献点" min="1">
+            <button onclick="addShopItem()">添加物品</button>
+            
+            <button onclick="showMainMenu()">返回主菜单</button>
+        </div>
+
+        <!-- 任务面板 -->
+        <div id="taskPanel" class="task-panel hidden">
+            <h2>任务大厅</h2>
+            <div id="taskList"></div>
+            <button onclick="showMainMenu()">返回主菜单</button>
+        </div>
+
+        <!-- 商城面板 -->
+        <div id="shopPanel" class="shop-panel hidden">
+            <h2>贡献商城</h2>
+            <div id="shopList"></div>
+            <button onclick="showMainMenu()">返回主菜单</button>
+        </div>
+
+        <!-- 成员面板 -->
+        <div id="memberPanel" class="member-panel hidden">
+            <h2>宗门成员</h2>
+            <div id="memberList"></div>
+            <button onclick="showMainMenu()">返回主菜单</button>
         </div>
     </div>
-    
-    <!-- 注册页面 -->
-    <div id="register-page" class="min-h-screen flex items-center justify-center p-4 hidden">
-        <div class="login-container w-full max-w-md p-8">
-            <div class="text-center mb-8">
-                <h1 class="text-4xl font-bold text-dark-green text-shadow">修仙宗门管理系统</h1>
-                <p class="text-dark-green mt-2">加入宗门，开启仙途</p>
-            </div>
-            
-            <form id="register-form" class="space-y-6">
-                <div>
-                    <label for="reg-username" class="block text-dark-green font-bold mb-2">用户名</label>
-                    <input type="text" id="reg-username" class="form-input w-full px-4 py-3" placeholder="请输入用户名" required>
-                </div>
-                
-                <div>
-                    <label for="reg-identity" class="block text-dark-green font-bold mb-2">身份</label>
-                    <select id="reg-identity" class="form-input w-full px-4 py-3" required>
-                        <option value="">请选择身份</option>
-                        <option value="护宗长老">护宗长老</option>
-                        <option value="传功长老">传功长老</option>
-                        <option value="执法长老">执法长老</option>
-                        <option value="外务长老">外务长老</option>
-                        <option value="云栖圃药长老">云栖圃药长老</option>
-                        <option value="执法堂主">执法堂主</option>
-                        <option value="刑堂执事">刑堂执事</option>
-                        <option value="任务堂执事">任务堂执事</option>
-                        <option value="贡献堂执事">贡献堂执事</option>
-                        <option value="藏经阁看守">藏经阁看守</option>
-                        <option value="丹殿主事">丹殿主事</option>
-                        <option value="器殿主事">器殿主事</option>
-                        <option value="符殿主事">符殿主事</option>
-                        <option value="阵殿主事">阵殿主事</option>
-                        <option value="凝云谷主">凝云谷主</option>
-                        <option value="落霞岭主">落霞岭主</option>
-                        <option value="万妖岭主">万妖岭主</option>
-                        <option value="凝霜峰主">凝霜峰主</option>
-                        <option value="朝阳峰主">朝阳峰主</option>
-                        <option value="皓月峰主">皓月峰主</option>
-                        <option value="清风峰主">清风峰主</option>
-                        <option value="流霞峰主">流霞峰主</option>
-                        <option value="惊雷峰主">惊雷峰主</option>
-                        <option value="甘霖峰主">甘霖峰主</option>
-                        <option value="苍松峰主">苍松峰主</option>
-                        <option value="翠柏峰主">翠柏峰主</option>
-                        <option value="丹霞峰主">丹霞峰主</option>
-                        <option value="碧波峰主">碧波峰主</option>
-                        <option value="傲雪峰主">傲雪峰主</option>
-                        <option value="普通弟子">普通弟子</option>
-                    </select>
-                </div>
-                
-                <div>
-                    <label for="reg-password" class="block text-dark-green font-bold mb-2">密码</label>
-                    <input type="password" id="reg-password" class="form-input w-full px-4 py-3" placeholder="请输入密码" required>
-                </div>
-                
-                <div>
-                    <label for="reg-confirm-password" class="block text-dark-green font-bold mb-2">确认密码</label>
-                    <input type="password" id="reg-confirm-password" class="form-input w-full px-4 py-3" placeholder="请再次输入密码" required>
-                </div>
-                
-                <div>
-                    <label for="realm" class="block text-dark-green font-bold mb-2">境界</label>
-                    <input type="text" id="realm" class="form-input w-full px-4 py-3" placeholder="请输入当前境界" required>
-                </div>
-                
-                <div class="text-center">
-                    <button type="submit" class="btn-primary w-full">注册</button>
-                </div>
-            </form>
-            
-            <div class="mt-6 text-center">
-                <p class="text-dark-green">已有账号？</p>
-                <button id="back-to-login-btn" class="btn-secondary mt-2">返回登录</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- 最高管理员页面 -->
-    <div id="supreme-admin-page" class="hidden min-h-screen p-4">
-        <div class="page-container max-w-6xl mx-auto">
-            <!-- 顶部导航 -->
-            <header class="bg-dark-green text-white p-4 rounded-t-lg flex justify-between items-center">
-                <h1 class="text-2xl font-bold">修仙宗门管理系统</h1>
-                <div class="flex items-center space-x-4">
-                    <span id="user-info" class="hidden">欢迎，<span id="current-username"></span>（<span id="current-identity"></span>）</span>
-                    <button id="logout-btn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">退出登录</button>
-                </div>
-            </header>
-            
-            <!-- 底部导航 -->
-            <nav class="bg-medium-green text-white">
-                <ul class="flex overflow-x-auto scrollbar-hidden">
-                    <li class="nav-item active" data-page="member-management">
-                        <a href="#" class="block px-6 py-3 text-center">成员信息</a>
-                    </li>
-                    <li class="nav-item" data-page="task-management">
-                        <a href="#" class="block px-6 py-3 text-center">任务管理</a>
-                    </li>
-                    <li class="nav-item" data-page="shop-management">
-                        <a href="#" class="block px-6 py-3 text-center">兑换商城</a>
-                    </li>
-                    <li class="nav-item" data-page="personal-info">
-                        <a href="#" class="block px-6 py-3 text-center">个人信息</a>
-                    </li>
-                </ul>
-            </nav>
-            
-            <!-- 内容区域 -->
-            <main class="p-4 bg-white rounded-b-lg">
-                <!-- 成员信息页面 -->
-                <div id="member-management" class="page-content">
-                    <h2 class="text-2xl font-bold text-dark-green mb-6">成员信息管理</h2>
-                    
-                    <div class="overflow-x-auto">
-                        <table class="w-full border-collapse">
-                            <thead>
-                                <tr class="bg-pale-green">
-                                    <th class="border border-gray-300 px-4 py-2">排名</th>
-                                    <th class="border border-gray-300 px-4 py-2">姓名</th>
-                                    <th class="border border-gray-300 px-4 py-2">身份</th>
-                                    <th class="border border-gray-300 px-4 py-2">境界</th>
-                                    <th class="border border-gray-300 px-4 py-2">贡献点</th>
-                                    <th class="border border-gray-300 px-4 py-2">操作</th>
-                                </tr>
-                            </thead>
-                            <tbody id="member-list">
-                                <!-- 成员列表将通过JavaScript动态生成 -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                
-                <!-- 任务管理页面 -->
-                <div id="task-management" class="page-content hidden">
-                    <h2 class="text-2xl font-bold text-dark-green mb-6">任务管理</h2>
-                    
-                    <div class="overflow-x-auto">
-                        <table class="w-full border-collapse">
-                            <thead>
-                                <tr class="bg-pale-green">
-                                    <th class="border border-gray-300 px-4 py-2">任务名称</th>
-                                    <th class="border border-gray-300 px-4 py-2">发布人</th>
-                                    <th class="border border-gray-300 px-4 py-2">数量</th>
-                                    <th class="border border-gray-300 px-4 py-2">最大接取人数</th>
-                                    <th class="border border-gray-300 px-4 py-2">已接取人数</th>
-                                    <th class="border border-gray-300 px-4 py-2">任务报酬</th>
-                                    <th class="border border-gray-300 px-4 py-2">状态</th>
-                                    <th class="border border-gray-300 px-4 py-2">操作</th>
-                                </tr>
-                            </thead>
-                            <tbody id="task-list">
-                                <!-- 任务列表将通过JavaScript动态生成 -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                
-                <!-- 兑换商城页面 -->
-                <div id="shop-management" class="page-content hidden">
-                    <h2 class="text-2xl font-bold text-dark-green mb-6">兑换商城管理</h2>
-                    
-                    <div class="mb-6">
-                        <button id="add-item-btn" class="btn-primary">添加商品</button>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="item-list">
-                        <!-- 商品列表将通过JavaScript动态生成 -->
-                    </div>
-                </div>
-                
-                <!-- 个人信息页面 -->
-                <div id="personal-info" class="page-content hidden">
-                    <h2 class="text-2xl font-bold text-dark-green mb-6">个人信息</h2>
-                    
-                    <div class="card p-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <p class="text-gray-600">姓名</p>
-                                <p class="text-xl font-bold text-dark-green" id="personal-name"></p>
-                            </div>
-                            <div>
-                                <p class="text-gray-600">身份</p>
-                                <p class="text-xl font-bold text-dark-green" id="personal-identity"></p>
-                            </div>
-                            <div>
-                                <p class="text-gray-600">境界</p>
-                                <div class="flex items-center">
-                                    <p class="text-xl font-bold text-dark-green mr-2" id="personal-realm"></p>
-                                    <button id="edit-realm-btn" class="btn-small btn-info">修改</button>
-                                </div>
-                            </div>
-                            <div>
-                                <p class="text-gray-600">贡献点</p>
-                                <p class="text-xl font-bold text-dark-green" id="personal-contribution"></p>
-                            </div>
-                        </div>
-                        
-                        <div class="mt-8">
-                            <h3 class="text-xl font-bold text-dark-green mb-4">修改密码</h3>
-                            <form id="change-password-form" class="space-y-4">
-                                <div>
-                                    <label for="current-password" class="block text-gray-600 mb-2">当前密码</label>
-                                    <input type="password" id="current-password" class="form-input w-full px-4 py-2" required>
-                                </div>
-                                <div>
-                                    <label for="new-password" class="block text-gray-600 mb-2">新密码</label>
-                                    <input type="password" id="new-password" class="form-input w-full px-4 py-2" required>
-                                </div>
-                                <div>
-                                    <label for="confirm-new-password" class="block text-gray-600 mb-2">确认新密码</label>
-                                    <input type="password" id="confirm-new-password" class="form-input w-full px-4 py-2" required>
-                                </div>
-                                <button type="submit" class="btn-primary">修改密码</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </div>
-    </div>
-    
-    <!-- 普通管理员页面 -->
-    <div id="admin-page" class="hidden min-h-screen p-4">
-        <div class="page-container max-w-6xl mx-auto">
-            <!-- 顶部导航 -->
-            <header class="bg-dark-green text-white p-4 rounded-t-lg flex justify-between items-center">
-                <h1 class="text-2xl font-bold">修仙宗门管理系统</h1>
-                <div class="flex items-center space-x-4">
-                    <span id="admin-user-info" class="hidden">欢迎，<span id="admin-current-username"></span>（<span id="admin-current-identity"></span>）</span>
-                    <button id="admin-logout-btn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">退出登录</button>
-                </div>
-            </header>
-            
-            <!-- 底部导航 -->
-            <nav class="bg-medium-green text-white">
-                <ul class="flex overflow-x-auto scrollbar-hidden">
-                    <li class="nav-item active" data-page="task-publish">
-                        <a href="#" class="block px-6 py-3 text-center">任务发布</a>
-                    </li>
-                    <li class="nav-item" data-page="admin-member-view">
-                        <a href="#" class="block px-6 py-3 text-center">成员信息</a>
-                    </li>
-                    <li class="nav-item" data-page="admin-personal-info">
-                        <a href="#" class="block px-6 py-3 text-center">个人信息</a>
-                    </li>
-                </ul>
-            </nav>
-            
-            <!-- 内容区域 -->
-            <main class="p-4 bg-white rounded-b-lg">
-                <!-- 任务发布页面 -->
-                <div id="task-publish" class="page-content">
-                    <h2 class="text-2xl font-bold text-dark-green mb-6">任务发布</h2>
-                    
-                    <div class="card p-6 mb-6">
-                        <h3 class="text-xl font-bold text-dark-green mb-4">发布新任务</h3>
-                        <form id="task-form" class="space-y-4">
-                            <div>
-                                <label for="task-name" class="block text-gray-600 mb-2">任务名称</label>
-                                <input type="text" id="task-name" class="form-input w-full px-4 py-2" required>
-                            </div>
-                            <div>
-                                <label for="task-quantity" class="block text-gray-600 mb-2">任务数量</label>
-                                <input type="number" id="task-quantity" class="form-input w-full px-4 py-2" min="1" required>
-                            </div>
-                            <div>
-                                <label for="task-duration" class="block text-gray-600 mb-2">完成任务所需时间（分钟）</label>
-                                <input type="number" id="task-duration" class="form-input w-full px-4 py-2" min="1" required>
-                            </div>
-                            <div>
-                                <label for="task-participants" class="block text-gray-600 mb-2">所需人数</label>
-                                <input type="number" id="task-participants" class="form-input w-full px-4 py-2" min="1" required>
-                            </div>
-                            <div>
-                                <label for="task-reward" class="block text-gray-600 mb-2">完成后可获得贡献点</label>
-                                <input type="number" id="task-reward" class="form-input w-full px-4 py-2" min="1" required>
-                            </div>
-                            <button type="submit" class="btn-primary">发布任务</button>
-                        </form>
-                    </div>
-                    
-                    <h3 class="text-xl font-bold text-dark-green mb-4">已发布任务</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full border-collapse">
-                            <thead>
-                                <tr class="bg-pale-green">
-                                    <th class="border border-gray-300 px-4 py-2">任务名称</th>
-                                    <th class="border border-gray-300 px-4 py-2">数量</th>
-                                    <th class="border border-gray-300 px-4 py-2">参与人员</th>
-                                    <th class="border border-gray-300 px-4 py-2">可获得贡献点</th>
-                                    <th class="border border-gray-300 px-4 py-2">任务状态</th>
-                                    <th class="border border-gray-300 px-4 py-2">剩余时间</th>
-                                </tr>
-                            </thead>
-                            <tbody id="admin-task-list">
-                                <!-- 任务列表将通过JavaScript动态生成 -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                
-                <!-- 成员信息页面 -->
-                <div id="admin-member-view" class="page-content hidden">
-                    <h2 class="text-2xl font-bold text-dark-green mb-6">成员信息</h2>
-                    
-                    <div class="overflow-x-auto">
-                        <table class="w-full border-collapse">
-                            <thead>
-                                <tr class="bg-pale-green">
-                                    <th class="border border-gray-300 px-4 py-2">排名</th>
-                                    <th class="border border-gray-300 px-4 py-2">姓名</th>
-                                    <th class="border border-gray-300 px-4 py-2">身份</th>
-                                    <th class="border border-gray-300 px-4 py-2">境界</th>
-                                    <th class="border border-gray-300 px-4 py-2">贡献点</th>
-                                </tr>
-                            </thead>
-                            <tbody id="admin-member-list">
-                                <!-- 成员列表将通过JavaScript动态生成 -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                
-                <!-- 个人信息页面 -->
-                <div id="admin-personal-info" class="page-content hidden">
-                    <h2 class="text-2xl font-bold text-dark-green mb-6">个人信息</h2>
-                    
-                    <div class="card p-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <p class="text-gray-600">姓名</p>
-                                <p class="text-xl font-bold text-dark-green" id="admin-personal-name"></p>
-                            </div>
-                            <div>
-                                <p class="text-gray-600">身份</p>
-                                <p class="text-xl font-bold text-dark-green" id="admin-personal-identity"></p>
-                            </div>
-                            <div>
-                                <p class="text-gray-600">境界</p>
-                                <div class="flex items-center">
-                                    <p class="text-xl font-bold text-dark-green mr-2" id="admin-personal-realm"></p>
-                                    <button id="admin-edit-realm-btn" class="btn-small btn-info">修改</button>
-                                </div>
-                            </div>
-                            <div>
-                                <p class="text-gray-600">贡献点</p>
-                                <p class="text-xl font-bold text-dark-green" id="admin-personal-contribution"></p>
-                            </div>
-                        </div>
-                        
-                        <div class="mt-8">
-                            <h3 class="text-xl font-bold text-dark-green mb-4">修改密码</h3>
-                            <form id="admin-change-password-form" class="space-y-4">
-                                <div>
-                                    <label for="admin-current-password" class="block text-gray-600 mb-2">当前密码</label>
-                                    <input type="password" id="admin-current-password" class="form-input w-full px-4 py-2" required>
-                                </div>
-                                <div>
-                                    <label for="admin-new-password" class="block text-gray-600 mb-2">新密码</label>
-                                    <input type="password" id="admin-new-password" class="form-input w-full px-4 py-2" required>
-                                </div>
-                                <div>
-                                    <label for="admin-confirm-new-password" class="block text-gray-600 mb-2">确认新密码</label>
-                                    <input type="password" id="admin-confirm-new-password" class="form-input w-full px-4 py-2" required>
-                                </div>
-                                <button type="submit" class="btn-primary">修改密码</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </div>
-    </div>
-    
-    <!-- 普通用户页面 -->
-    <div id="user-page" class="hidden min-h-screen p-4">
-        <div class="page-container max-w-6xl mx-auto">
-            <!-- 顶部导航 -->
-            <header class="bg-dark-green text-white p-4 rounded-t-lg flex justify-between items-center">
-                <h1 class="text-2xl font-bold">修仙宗门管理系统</h1>
-                <div class="flex items-center space-x-4">
-                    <span id="user-info-display" class="hidden">欢迎，<span id="user-current-username"></span>（<span id="user-current-identity"></span>）</span>
-                    <button id="user-logout-btn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">退出登录</button>
-                </div>
-            </header>
-            
-            <!-- 底部导航 -->
-            <nav class="bg-medium-green text-white">
-                <ul class="flex overflow-x-auto scrollbar-hidden">
-                    <li class="nav-item active" data-page="task-accept">
-                        <a href="#" class="block px-6 py-3 text-center">任务接取</a>
-                    </li>
-                    <li class="nav-item" data-page="shop">
-                        <a href="#" class="block px-6 py-3 text-center">兑换商城</a>
-                    </li>
-                    <li class="nav-item" data-page="user-personal-info">
-                        <a href="#" class="block px-6 py-3 text-center">个人信息</a>
-                    </li>
-                </ul>
-            </nav>
-            
-            <!-- 内容区域 -->
-            <main class="p-4 bg-white rounded-b-lg">
-                <!-- 任务接取页面 -->
-                <div id="task-accept" class="page-content">
-                    <h2 class="text-2xl font-bold text-dark-green mb-6">任务接取</h2>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="task-card-list">
-                        <!-- 任务卡片列表将通过JavaScript动态生成 -->
-                    </div>
-                </div>
-                
-                <!-- 兑换商城页面 -->
-                <div id="shop" class="page-content hidden">
-                    <h2 class="text-2xl font-bold text-dark-green mb-6">兑换商城</h2>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="shop-item-list">
-                        <!-- 商品列表将通过JavaScript动态生成 -->
-                    </div>
-                </div>
-                
-                <!-- 个人信息页面 -->
-                <div id="user-personal-info" class="page-content hidden">
-                    <h2 class="text-2xl font-bold text-dark-green mb-6">个人信息</h2>
-                    
-                    <div class="card p-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <p class="text-gray-600">姓名</p>
-                                <p class="text-xl font-bold text-dark-green" id="user-personal-name"></p>
-                            </div>
-                            <div>
-                                <p class="text-gray-600">身份</p>
-                                <p class="text-xl font-bold text-dark-green" id="user-personal-identity"></p>
-                            </div>
-                            <div>
-                                <p class="text-gray-600">境界</p>
-                                <div class="flex items-center">
-                                    <p class="text-xl font-bold text-dark-green mr-2" id="user-personal-realm"></p>
-                                    <button id="user-edit-realm-btn" class="btn-small btn-info">修改</button>
-                                </div>
-                            </div>
-                            <div>
-                                <p class="text-gray-600">贡献点</p>
-                                <p class="text-xl font-bold text-dark-green" id="user-personal-contribution"></p>
-                            </div>
-                        </div>
-                        
-                        <div class="mt-8">
-                            <h3 class="text-xl font-bold text-dark-green mb-4">修改密码</h3>
-                            <form id="user-change-password-form" class="space-y-4">
-                                <div>
-                                    <label for="user-current-password" class="block text-gray-600 mb-2">当前密码</label>
-                                    <input type="password" id="user-current-password" class="form-input w-full px-4 py-2" required>
-                                </div>
-                                <div>
-                                    <label for="user-new-password" class="block text-gray-600 mb-2">新密码</label>
-                                    <input type="password" id="user-new-password" class="form-input w-full px-4 py-2" required>
-                                </div>
-                                <div>
-                                    <label for="user-confirm-new-password" class="block text-gray-600 mb-2">确认新密码</label>
-                                    <input type="password" id="user-confirm-new-password" class="form-input w-full px-4 py-2" required>
-                                </div>
-                                <button type="submit" class="btn-primary">修改密码</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </div>
-    </div>
-    
-    <!-- 模态框 -->
-    <div id="modal" class="modal">
-        <div class="modal-content p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h3 id="modal-title" class="text-xl font-bold text-dark-green"></h3>
-                <button id="close-modal" class="text-gray-500 hover:text-gray-700">
-                    <i class="fa fa-times text-xl"></i>
-                </button>
-            </div>
-            <div id="modal-body">
-                <!-- 模态框内容将通过JavaScript动态生成 -->
-            </div>
-        </div>
-    </div>
-    
-    <!-- Toast提示 -->
-    <div id="toast" class="toast"></div>
-    
+
     <script>
-        // 初始化数据
+        // 初始化默认最高管理员账号（首次加载自动创建）
+        function initDefaultAdmins() {
+            let users = JSON.parse(localStorage.getItem('qingyunzong_users') || '[]');
+            
+            // 检查默认账号是否存在，不存在则创建
+            const defaultAdmins = [
+                { username: '商时序', name: '商时序', identity: '太上长老', password: '999999', contribution: 99999, isAdmin: true, isSuperAdmin: true },
+                { username: '云渡', name: '云渡', identity: '宗主', password: '888888', contribution: 88888, isAdmin: true, isSuperAdmin: true },
+                { username: '卿安', name: '卿安', identity: '副宗主', password: '666666', contribution: 66666, isAdmin: true, isSuperAdmin: true }
+            ];
+
+            let updated = false;
+            defaultAdmins.forEach(admin => {
+                const exists = users.some(user => user.username === admin.username);
+                if (!exists) {
+                    users.push(admin);
+                    updated = true;
+                }
+            });
+
+            if (updated) {
+                localStorage.setItem('qingyunzong_users', JSON.stringify(users));
+            }
+        }
+
+        // 初始化任务和商城数据
         function initData() {
-            // 检查是否已有数据
-            if (!localStorage.getItem('users')) {
-                // 初始化用户数据
-                const users = [
-                    {
-                        id: '1',
-                        username: '商时序',
-                        identity: '太上长老',
-                        password: '999999',
-                        realm: '合体期',
-                        contribution: 10000,
-                        canModifyInfo: true
-                    },
-                    {
-                        id: '2',
-                        username: '云渡',
-                        identity: '宗主',
-                        password: '888888',
-                        realm: '合体期',
-                        contribution: 9000,
-                        canModifyInfo: true
-                    },
-                    {
-                        id: '3',
-                        username: '卿安',
-                        identity: '副宗主',
-                        password: '666666',
-                        realm: '洞虚期',
-                        contribution: 8000,
-                        canModifyInfo: true
-                    }
+            // 初始化任务列表
+            if (!localStorage.getItem('qingyunzong_tasks')) {
+                const defaultTasks = [
+                    { id: 1, title: '宗门巡逻', content: '每日宗门内外巡逻3次，防范外敌入侵', reward: 50, publisher: '系统', time: new Date().toLocaleString() },
+                    { id: 2, title: '采集草药', content: '前往后山采集10株清心草，用于炼丹', reward: 80, publisher: '系统', time: new Date().toLocaleString() },
+                    { id: 3, title: '整理藏经阁', content: '整理藏经阁书籍，按类别归档', reward: 30, publisher: '系统', time: new Date().toLocaleString() }
                 ];
-                localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('qingyunzong_tasks', JSON.stringify(defaultTasks));
             }
-            
-            // 检查是否已有任务数据
-            if (!localStorage.getItem('tasks')) {
-                localStorage.setItem('tasks', JSON.stringify([]));
-            }
-            
-            // 检查是否已有商品数据
-            if (!localStorage.getItem('items')) {
-                const items = [
-                    {
-                        id: '1',
-                        name: '聚气丹',
-                        totalQuantity: 100,
-                        remainingQuantity: 100,
-                        price: 10,
-                        description: '帮助修炼者快速聚集灵气，提升修炼速度'
-                    },
-                    {
-                        id: '2',
-                        name: '培元丹',
-                        totalQuantity: 80,
-                        remainingQuantity: 80,
-                        price: 20,
-                        description: '巩固根基，增强体质'
-                    },
-                    {
-                        id: '3',
-                        name: '固灵丹',
-                        totalQuantity: 50,
-                        remainingQuantity: 50,
-                        price: 50,
-                        description: '稳定境界，防止走火入魔'
-                    },
-                    {
-                        id: '4',
-                        name: '飞行符',
-                        totalQuantity: 200,
-                        remainingQuantity: 200,
-                        price: 5,
-                        description: '使用后可短时间飞行'
-                    },
-                    {
-                        id: '5',
-                        name: '隐身符',
-                        totalQuantity: 100,
-                        remainingQuantity: 100,
-                        price: 25,
-                        description: '使用后可短时间隐身'
-                    },
-                    {
-                        id: '6',
-                        name: '防御阵盘',
-                        totalQuantity: 30,
-                        remainingQuantity: 30,
-                        price: 100,
-                        description: '布置后形成防御阵法，抵御攻击'
-                    }
+
+            // 初始化商城物品
+            if (!localStorage.getItem('qingyunzong_shop')) {
+                const defaultShop = [
+                    { id: 1, name: '清心丹', desc: '清心凝神，恢复灵力', price: 100 },
+                    { id: 2, name: '基础剑诀', desc: '青云宗基础剑诀秘籍', price: 200 },
+                    { id: 3, name: '疗伤药', desc: '快速恢复伤势', price: 80 }
                 ];
-                localStorage.setItem('items', JSON.stringify(items));
+                localStorage.setItem('qingyunzong_shop', JSON.stringify(defaultShop));
             }
         }
-        
-        // 初始化页面
-        document.addEventListener('DOMContentLoaded', function() {
+
+        // 页面加载时初始化
+        window.onload = function() {
+            initDefaultAdmins();
             initData();
-            
-            // 登录表单提交
-            document.getElementById('login-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const username = document.getElementById('username').value;
-                const identity = document.getElementById('identity').value;
-                const password = document.getElementById('password').value;
-                
-                const users = JSON.parse(localStorage.getItem('users'));
-                const user = users.find(u => u.username === username && u.identity === identity && u.password === password);
-                
-                if (user) {
-                    // 保存当前登录用户
-                    localStorage.setItem('currentUser', JSON.stringify(user));
-                    
-                    // 根据用户身份跳转到相应页面
-                    if (user.identity === '太上长老' || user.identity === '宗主' || user.identity === '副宗主') {
-                        showToast('登录成功', 'success');
-                        setTimeout(() => {
-                            document.getElementById('login-page').classList.add('hidden');
-                            document.getElementById('supreme-admin-page').classList.remove('hidden');
-                            loadSupremeAdminPage();
-                        }, 1000);
-                    } else if (user.identity !== '普通弟子') {
-                        showToast('登录成功', 'success');
-                        setTimeout(() => {
-                            document.getElementById('login-page').classList.add('hidden');
-                            document.getElementById('admin-page').classList.remove('hidden');
-                            loadAdminPage();
-                        }, 1000);
-                    } else {
-                        showToast('登录成功', 'success');
-                        setTimeout(() => {
-                            document.getElementById('login-page').classList.add('hidden');
-                            document.getElementById('user-page').classList.remove('hidden');
-                            loadUserPage();
-                        }, 1000);
-                    }
-                } else {
-                    showToast('用户名、身份或密码错误', 'error');
-                }
-            });
-            
-            // 注册按钮点击事件
-            document.getElementById('register-btn').addEventListener('click', function() {
-                document.getElementById('login-page').classList.add('hidden');
-                document.getElementById('register-page').classList.remove('hidden');
-            });
-            
-            // 返回登录按钮点击事件
-            document.getElementById('back-to-login-btn').addEventListener('click', function() {
-                document.getElementById('register-page').classList.add('hidden');
-                document.getElementById('login-page').classList.remove('hidden');
-            });
-            
-            // 注册表单提交
-            document.getElementById('register-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const username = document.getElementById('reg-username').value;
-                const identity = document.getElementById('reg-identity').value;
-                const password = document.getElementById('reg-password').value;
-                const confirmPassword = document.getElementById('reg-confirm-password').value;
-                const realm = document.getElementById('realm').value;
-                
-                if (password !== confirmPassword) {
-                    showToast('两次输入的密码不一致', 'error');
-                    return;
-                }
-                
-                const users = JSON.parse(localStorage.getItem('users'));
-                const existingUser = users.find(u => u.username === username);
-                
-                if (existingUser) {
-                    showToast('用户名已存在', 'error');
-                    return;
-                }
-                
-                // 创建新用户
-                const newUser = {
-                    id: Date.now().toString(),
-                    username: username,
-                    identity: identity,
-                    password: password,
-                    realm: realm,
-                    contribution: 0,
-                    canModifyInfo: true
-                };
-                
-                users.push(newUser);
-                localStorage.setItem('users', JSON.stringify(users));
-                
-                showToast('注册成功，请登录', 'success');
-                setTimeout(() => {
-                    document.getElementById('register-page').classList.add('hidden');
-                    document.getElementById('login-page').classList.remove('hidden');
-                }, 1000);
-            });
-            
-            // 退出登录按钮点击事件
-            document.getElementById('logout-btn').addEventListener('click', function() {
-                localStorage.removeItem('currentUser');
-                document.getElementById('supreme-admin-page').classList.add('hidden');
-                document.getElementById('login-page').classList.remove('hidden');
-                showToast('已退出登录', 'info');
-            });
-            
-            document.getElementById('admin-logout-btn').addEventListener('click', function() {
-                localStorage.removeItem('currentUser');
-                document.getElementById('admin-page').classList.add('hidden');
-                document.getElementById('login-page').classList.remove('hidden');
-                showToast('已退出登录', 'info');
-            });
-            
-            document.getElementById('user-logout-btn').addEventListener('click', function() {
-                localStorage.removeItem('currentUser');
-                document.getElementById('user-page').classList.add('hidden');
-                document.getElementById('login-page').classList.remove('hidden');
-                showToast('已退出登录', 'info');
-            });
-            
-            // 导航切换
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    // 移除所有导航项的active类
-                    this.parentElement.querySelectorAll('.nav-item').forEach(navItem => {
-                        navItem.classList.remove('active');
-                    });
-                    
-                    // 添加当前导航项的active类
-                    this.classList.add('active');
-                    
-                    // 隐藏所有内容页面
-                    const pageId = this.getAttribute('data-page');
-                    this.closest('nav').nextElementSibling.querySelectorAll('.page-content').forEach(page => {
-                        page.classList.add('hidden');
-                    });
-                    
-                    // 显示当前内容页面
-                    document.getElementById(pageId).classList.remove('hidden');
-                });
-            });
-            
-            // 模态框关闭按钮
-            document.getElementById('close-modal').addEventListener('click', function() {
-                document.getElementById('modal').style.display = 'none';
-            });
-            
-            // 点击模态框外部关闭模态框
-            window.addEventListener('click', function(e) {
-                const modal = document.getElementById('modal');
-                if (e.target === modal) {
-                    modal.style.display = 'none';
-                }
-            });
-            
-            // 最高管理员修改密码表单提交
-            document.getElementById('change-password-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const currentPassword = document.getElementById('current-password').value;
-                const newPassword = document.getElementById('new-password').value;
-                const confirmNewPassword = document.getElementById('confirm-new-password').value;
-                
-                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-                
-                if (currentUser.password !== currentPassword) {
-                    showToast('当前密码错误', 'error');
-                    return;
-                }
-                
-                if (newPassword !== confirmNewPassword) {
-                    showToast('两次输入的新密码不一致', 'error');
-                    return;
-                }
-                
-                // 更新密码
-                const users = JSON.parse(localStorage.getItem('users'));
-                const userIndex = users.findIndex(u => u.id === currentUser.id);
-                users[userIndex].password = newPassword;
-                localStorage.setItem('users', JSON.stringify(users));
-                
-                // 更新当前用户
-                currentUser.password = newPassword;
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                
-                showToast('密码修改成功', 'success');
-                this.reset();
-            });
-            
-            // 普通管理员修改密码表单提交
-            document.getElementById('admin-change-password-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const currentPassword = document.getElementById('admin-current-password').value;
-                const newPassword = document.getElementById('admin-new-password').value;
-                const confirmNewPassword = document.getElementById('admin-confirm-new-password').value;
-                
-                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-                
-                if (currentUser.password !== currentPassword) {
-                    showToast('当前密码错误', 'error');
-                    return;
-                }
-                
-                if (newPassword !== confirmNewPassword) {
-                    showToast('两次输入的新密码不一致', 'error');
-                    return;
-                }
-                
-                // 检查是否在一个月内修改过密码
-                const lastPasswordChange = localStorage.getItem(`lastPasswordChange_${currentUser.id}`);
-                if (lastPasswordChange) {
-                    const lastChangeTime = new Date(lastPasswordChange);
-                    const now = new Date();
-                    const diffTime = Math.abs(now - lastChangeTime);
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    
-                    if (diffDays < 30) {
-                        showToast('每月只能修改一次密码', 'error');
-                        return;
-                    }
-                }
-                
-                // 更新密码
-                const users = JSON.parse(localStorage.getItem('users'));
-                const userIndex = users.findIndex(u => u.id === currentUser.id);
-                users[userIndex].password = newPassword;
-                localStorage.setItem('users', JSON.stringify(users));
-                
-                // 更新当前用户
-                currentUser.password = newPassword;
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                
-                // 记录密码修改时间
-                localStorage.setItem(`lastPasswordChange_${currentUser.id}`, new Date().toISOString());
-                
-                showToast('密码修改成功', 'success');
-                this.reset();
-            });
-            
-            // 普通用户修改密码表单提交
-            document.getElementById('user-change-password-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const currentPassword = document.getElementById('user-current-password').value;
-                const newPassword = document.getElementById('user-new-password').value;
-                const confirmNewPassword = document.getElementById('user-confirm-new-password').value;
-                
-                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-                
-                if (currentUser.password !== currentPassword) {
-                    showToast('当前密码错误', 'error');
-                    return;
-                }
-                
-                if (newPassword !== confirmNewPassword) {
-                    showToast('两次输入的新密码不一致', 'error');
-                    return;
-                }
-                
-                // 检查是否在一个月内修改过密码
-                const lastPasswordChange = localStorage.getItem(`lastPasswordChange_${currentUser.id}`);
-                if (lastPasswordChange) {
-                    const lastChangeTime = new Date(lastPasswordChange);
-                    const now = new Date();
-                    const diffTime = Math.abs(now - lastChangeTime);
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    
-                    if (diffDays < 30) {
-                        showToast('每月只能修改一次密码', 'error');
-                        return;
-                    }
-                }
-                
-                // 更新密码
-                const users = JSON.parse(localStorage.getItem('users'));
-                const userIndex = users.findIndex(u => u.id === currentUser.id);
-                users[userIndex].password = newPassword;
-                localStorage.setItem('users', JSON.stringify(users));
-                
-                // 更新当前用户
-                currentUser.password = newPassword;
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                
-                // 记录密码修改时间
-                localStorage.setItem(`lastPasswordChange_${currentUser.id}`, new Date().toISOString());
-                
-                showToast('密码修改成功', 'success');
-                this.reset();
-            });
-            
-            // 任务发布表单提交
-            document.getElementById('task-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const taskName = document.getElementById('task-name').value;
-                const taskQuantity = parseInt(document.getElementById('task-quantity').value);
-                const taskDuration = parseInt(document.getElementById('task-duration').value);
-                const taskParticipants = parseInt(document.getElementById('task-participants').value);
-                const taskReward = parseInt(document.getElementById('task-reward').value);
-                
-                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-                
-                // 创建新任务
-                const newTask = {
-                    id: Date.now().toString(),
-                    name: taskName,
-                    quantity: taskQuantity,
-                    maxParticipants: taskParticipants,
-                    currentParticipants: 0,
-                    duration: taskDuration,
-                    reward: taskReward,
-                    publisher: currentUser.id,
-                    publisherName: currentUser.username,
-                    status: '未接取',
-                    participants: [],
-                    createTime: new Date().toISOString(),
-                    endTime: null
-                };
-                
-                const tasks = JSON.parse(localStorage.getItem('tasks'));
-                tasks.push(newTask);
-                localStorage.setItem('tasks', JSON.stringify(tasks));
-                
-                showToast('任务发布成功', 'success');
-                this.reset();
-                
-                // 重新加载任务列表
-                loadAdminTaskList();
-            });
-            
-            // 添加商品按钮点击事件
-            document.getElementById('add-item-btn').addEventListener('click', function() {
-                const modalTitle = document.getElementById('modal-title');
-                const modalBody = document.getElementById('modal-body');
-                
-                modalTitle.textContent = '添加新商品';
-                modalBody.innerHTML = `
-                    <form id="add-item-form" class="space-y-4">
-                        <div>
-                            <label for="item-name" class="block text-gray-600 mb-2">商品名称</label>
-                            <input type="text" id="item-name" class="form-input w-full px-4 py-2" required>
-                        </div>
-                        <div>
-                            <label for="item-quantity" class="block text-gray-600 mb-2">商品数量</label>
-                            <input type="number" id="item-quantity" class="form-input w-full px-4 py-2" min="1" max="999" required>
-                        </div>
-                        <div>
-                            <label for="item-price" class="block text-gray-600 mb-2">所需贡献点</label>
-                            <input type="number" id="item-price" class="form-input w-full px-4 py-2" min="1" required>
-                        </div>
-                        <div>
-                            <label for="item-description" class="block text-gray-600 mb-2">商品描述</label>
-                            <textarea id="item-description" class="form-input w-full px-4 py-2" rows="3"></textarea>
-                        </div>
-                        <button type="submit" class="btn-primary">添加商品</button>
-                    </form>
-                `;
-                
-                document.getElementById('modal').style.display = 'block';
-                
-                // 添加商品表单提交
-                document.getElementById('add-item-form').addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    const itemName = document.getElementById('item-name').value;
-                    const itemQuantity = parseInt(document.getElementById('item-quantity').value);
-                    const itemPrice = parseInt(document.getElementById('item-price').value);
-                    const itemDescription = document.getElementById('item-description').value;
-                    
-                    // 创建新商品
-                    const newItem = {
-                        id: Date.now().toString(),
-                        name: itemName,
-                        totalQuantity: itemQuantity,
-                        remainingQuantity: itemQuantity,
-                        price: itemPrice,
-                        description: itemDescription
-                    };
-                    
-                    const items = JSON.parse(localStorage.getItem('items'));
-                    items.push(newItem);
-                    localStorage.setItem('items', JSON.stringify(items));
-                    
-                    showToast('商品添加成功', 'success');
-                    document.getElementById('modal').style.display = 'none';
-                    
-                    // 重新加载商品列表
-                    loadShopItems();
-                });
-            });
-            
-            // 最高管理员修改境界按钮点击事件
-            document.getElementById('edit-realm-btn').addEventListener('click', function() {
-                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-                
-                if (!currentUser.canModifyInfo) {
-                    showToast('个人信息只能修改一次', 'error');
-                    return;
-                }
-                
-                const modalTitle = document.getElementById('modal-title');
-                const modalBody = document.getElementById('modal-body');
-                
-                modalTitle.textContent = '修改境界';
-                modalBody.innerHTML = `
-                    <form id="edit-realm-form" class="space-y-4">
-                        <div>
-                            <label for="new-realm" class="block text-gray-600 mb-2">新境界</label>
-                            <input type="text" id="new-realm" class="form-input w-full px-4 py-2" value="${currentUser.realm}" required>
-                        </div>
-                        <button type="submit" class="btn-primary">保存修改</button>
-                    </form>
-                `;
-                
-                document.getElementById('modal').style.display = 'block';
-                
-                // 修改境界表单提交
-                document.getElementById('edit-realm-form').addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    const newRealm = document.getElementById('new-realm').value;
-                    
-                    // 更新境界
-                    const users = JSON.parse(localStorage.getItem('users'));
-                    const userIndex = users.findIndex(u => u.id === currentUser.id);
-                    users[userIndex].realm = newRealm;
-                    users[userIndex].canModifyInfo = false;
-                    localStorage.setItem('users', JSON.stringify(users));
-                    
-                    // 更新当前用户
-                    currentUser.realm = newRealm;
-                    currentUser.canModifyInfo = false;
-                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                    
-                    showToast('境界修改成功', 'success');
-                    document.getElementById('modal').style.display = 'none';
-                    
-                    // 更新个人信息页面
-                    document.getElementById('personal-realm').textContent = newRealm;
-                });
-            });
-            
-            // 普通管理员修改境界按钮点击事件
-            document.getElementById('admin-edit-realm-btn').addEventListener('click', function() {
-                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-                
-                if (!currentUser.canModifyInfo) {
-                    showToast('个人信息只能修改一次', 'error');
-                    return;
-                }
-                
-                const modalTitle = document.getElementById('modal-title');
-                const modalBody = document.getElementById('modal-body');
-                
-                modalTitle.textContent = '修改境界';
-                modalBody.innerHTML = `
-                    <form id="admin-edit-realm-form" class="space-y-4">
-                        <div>
-                            <label for="admin-new-realm" class="block text-gray-600 mb-2">新境界</label>
-                            <input type="text" id="admin-new-realm" class="form-input w-full px-4 py-2" value="${currentUser.realm}" required>
-                        </div>
-                        <button type="submit" class="btn-primary">保存修改</button>
-                    </form>
-                `;
-                
-                document.getElementById('modal').style.display = 'block';
-                
-                // 修改境界表单提交
-                document.getElementById('admin-edit-realm-form').addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    const newRealm = document.getElementById('admin-new-realm').value;
-                    
-                    // 更新境界
-                    const users = JSON.parse(localStorage.getItem('users'));
-                    const userIndex = users.findIndex(u => u.id === currentUser.id);
-                    users[userIndex].realm = newRealm;
-                    users[userIndex].canModifyInfo = false;
-                    localStorage.setItem('users', JSON.stringify(users));
-                    
-                    // 更新当前用户
-                    currentUser.realm = newRealm;
-                    currentUser.canModifyInfo = false;
-                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                    
-                    showToast('境界修改成功', 'success');
-                    document.getElementById('modal').style.display = 'none';
-                    
-                    // 更新个人信息页面
-                    document.getElementById('admin-personal-realm').textContent = newRealm;
-                });
-            });
-            
-            // 普通用户修改境界按钮点击事件
-            document.getElementById('user-edit-realm-btn').addEventListener('click', function() {
-                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-                
-                if (!currentUser.canModifyInfo) {
-                    showToast('个人信息只能修改一次', 'error');
-                    return;
-                }
-                
-                const modalTitle = document.getElementById('modal-title');
-                const modalBody = document.getElementById('modal-body');
-                
-                modalTitle.textContent = '修改境界';
-                modalBody.innerHTML = `
-                    <form id="user-edit-realm-form" class="space-y-4">
-                        <div>
-                            <label for="user-new-realm" class="block text-gray-600 mb-2">新境界</label>
-                            <input type="text" id="user-new-realm" class="form-input w-full px-4 py-2" value="${currentUser.realm}" required>
-                        </div>
-                        <button type="submit" class="btn-primary">保存修改</button>
-                    </form>
-                `;
-                
-                document.getElementById('modal').style.display = 'block';
-                
-                // 修改境界表单提交
-                document.getElementById('user-edit-realm-form').addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    const newRealm = document.getElementById('user-new-realm').value;
-                    
-                    // 更新境界
-                    const users = JSON.parse(localStorage.getItem('users'));
-                    const userIndex = users.findIndex(u => u.id === currentUser.id);
-                    users[userIndex].realm = newRealm;
-                    users[userIndex].canModifyInfo = false;
-                    localStorage.setItem('users', JSON.stringify(users));
-                    
-                    // 更新当前用户
-                    currentUser.realm = newRealm;
-                    currentUser.canModifyInfo = false;
-                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                    
-                    showToast('境界修改成功', 'success');
-                    document.getElementById('modal').style.display = 'none';
-                    
-                    // 更新个人信息页面
-                    document.getElementById('user-personal-realm').textContent = newRealm;
-                });
-            });
-            
             // 检查是否有记住的登录状态
-            const currentUser = localStorage.getItem('currentUser');
-            if (currentUser) {
-                const user = JSON.parse(currentUser);
-                
-                if (user.identity === '太上长老' || user.identity === '宗主' || user.identity === '副宗主') {
-                    document.getElementById('login-page').classList.add('hidden');
-                    document.getElementById('supreme-admin-page').classList.remove('hidden');
-                    loadSupremeAdminPage();
-                } else if (user.identity !== '普通弟子') {
-                    document.getElementById('login-page').classList.add('hidden');
-                    document.getElementById('admin-page').classList.remove('hidden');
-                    loadAdminPage();
-                } else {
-                    document.getElementById('login-page').classList.add('hidden');
-                    document.getElementById('user-page').classList.remove('hidden');
-                    loadUserPage();
-                }
+            const loggedUser = JSON.parse(localStorage.getItem('qingyunzong_loggedUser') || 'null');
+            if (loggedUser) {
+                showMainMenu();
+                loadUserInfo(loggedUser);
             }
-            
-            // 定期检查任务状态
-            setInterval(checkTasksStatus, 1000);
-        });
-        
-        // 加载最高管理员页面
-        function loadSupremeAdminPage() {
-            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-            
-            // 显示用户信息
-            document.getElementById('current-username').textContent = currentUser.username;
-            document.getElementById('current-identity').textContent = currentUser.identity;
-            document.getElementById('user-info').classList.remove('hidden');
-            
-            // 加载个人信息
-            document.getElementById('personal-name').textContent = currentUser.username;
-            document.getElementById('personal-identity').textContent = currentUser.identity;
-            document.getElementById('personal-realm').textContent = currentUser.realm;
-            document.getElementById('personal-contribution').textContent = currentUser.contribution;
-            
-            // 加载成员列表
-            loadMemberList();
-            
-            // 加载任务列表
-            loadTaskList();
-            
-            // 加载商品列表
-            loadShopItems();
+        };
+
+        // 登录相关
+        function showLogin() {
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('registerSection').classList.add('hidden');
+            document.getElementById('mainMenu').classList.add('hidden');
+            document.getElementById('loginError').classList.add('hidden');
         }
-        
-        // 加载普通管理员页面
-        function loadAdminPage() {
-            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-            
-            // 显示用户信息
-            document.getElementById('admin-current-username').textContent = currentUser.username;
-            document.getElementById('admin-current-identity').textContent = currentUser.identity;
-            document.getElementById('admin-user-info').classList.remove('hidden');
-            
-            // 加载个人信息
-            document.getElementById('admin-personal-name').textContent = currentUser.username;
-            document.getElementById('admin-personal-identity').textContent = currentUser.identity;
-            document.getElementById('admin-personal-realm').textContent = currentUser.realm;
-            document.getElementById('admin-personal-contribution').textContent = currentUser.contribution;
-            
-            // 加载管理员任务列表
-            loadAdminTaskList();
-            
-            // 加载管理员成员列表
-            loadAdminMemberList();
+
+        function showRegister() {
+            document.getElementById('registerSection').classList.remove('hidden');
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('registerError').classList.add('hidden');
+            document.getElementById('registerSuccess').classList.add('hidden');
         }
-        
-        // 加载普通用户页面
-        function loadUserPage() {
-            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+        function login() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
             
-            // 显示用户信息
-            document.getElementById('user-current-username').textContent = currentUser.username;
-            document.getElementById('user-current-identity').textContent = currentUser.identity;
-            document.getElementById('user-info-display').classList.remove('hidden');
-            
-            // 加载个人信息
-            document.getElementById('user-personal-name').textContent = currentUser.username;
-            document.getElementById('user-personal-identity').textContent = currentUser.identity;
-            document.getElementById('user-personal-realm').textContent = currentUser.realm;
-            document.getElementById('user-personal-contribution').textContent = currentUser.contribution;
-            
-            // 加载任务卡片列表
-            loadTaskCards();
-            
-            // 加载商城商品列表
-            loadUserShopItems();
+            if (!username || !password) {
+                showError('loginError', '请输入用户名和密码');
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('qingyunzong_users') || '[]');
+            const user = users.find(u => u.username === username && u.password === password);
+
+            if (user) {
+                // 保存登录状态（解决退出后丢失的问题）
+                localStorage.setItem('qingyunzong_loggedUser', JSON.stringify(user));
+                loadUserInfo(user);
+                showMainMenu();
+            } else {
+                showError('loginError', '用户名或密码错误');
+            }
         }
-        
-        // 加载成员列表
-        function loadMemberList() {
-            const users = JSON.parse(localStorage.getItem('users'));
-            const memberList = document.getElementById('member-list');
+
+        function loadUserInfo(user) {
+            document.getElementById('currentUserName').textContent = user.name;
+            document.getElementById('currentUserIdentity').textContent = user.identity;
+            document.getElementById('userContribution').textContent = `当前贡献点：${user.contribution || 0}`;
             
-            // 按贡献点排序
-            users.sort((a, b) => b.contribution - a.contribution);
-            
-            memberList.innerHTML = '';
-            
-            users.forEach((user, index) => {
-                const row = document.createElement('tr');
-                
-                // 添加排名样式
-                let rankClass = '';
-                if (index === 0) rankClass = 'rank-gold';
-                else if (index === 1) rankClass = 'rank-silver';
-                else if (index === 2) rankClass = 'rank-bronze';
-                
-                row.innerHTML = `
-                    <td class="border border-gray-300 px-4 py-2 ${rankClass} font-bold">${index + 1}</td>
-                    <td class="border border-gray-300 px-4 py-2">${user.username}</td>
-                    <td class="border border-gray-300 px-4 py-2">${user.identity}</td>
-                    <td class="border border-gray-300 px-4 py-2">${user.realm}</td>
-                    <td class="border border-gray-300 px-4 py-2">${user.contribution}</td>
-                    <td class="border border-gray-300 px-4 py-2">
-                        <button class="btn-small btn-warning mr-2 edit-member" data-id="${user.id}">修改</button>
-                    </td>
-                `;
-                
-                memberList.appendChild(row);
-            });
-            
-            // 添加修改成员信息事件
-            document.querySelectorAll('.edit-member').forEach(button => {
-                button.addEventListener('click', function() {
-                    const userId = this.getAttribute('data-id');
-                    const users = JSON.parse(localStorage.getItem('users'));
-                    const user = users.find(u => u.id === userId);
-                    
-                    const modalTitle = document.getElementById('modal-title');
-                    const modalBody = document.getElementById('modal-body');
-                    
-                    modalTitle.textContent = '修改成员信息';
-                    modalBody.innerHTML = `
-                        <form id="edit-member-form" class="space-y-4">
-                            <div>
-                                <label for="edit-username" class="block text-gray-600 mb-2">姓名</label>
-                                <input type="text" id="edit-username" class="form-input w-full px-4 py-2" value="${user.username}" required>
-                            </div>
-                            <div>
-                                <label for="edit-identity" class="block text-gray-600 mb-2">身份</label>
-                                <select id="edit-identity" class="form-input w-full px-4 py-2" required>
-                                    <option value="太上长老" ${user.identity === '太上长老' ? 'selected' : ''}>太上长老</option>
-                                    <option value="宗主" ${user.identity === '宗主' ? 'selected' : ''}>宗主</option>
-                                    <option value="副宗主" ${user.identity === '副宗主' ? 'selected' : ''}>副宗主</option>
-                                    <option value="护宗长老" ${user.identity === '护宗长老' ? 'selected' : ''}>护宗长老</option>
-                                    <option value="传功长老" ${user.identity === '传功长老' ? 'selected' : ''}>传功长老</option>
-                                    <option value="执法长老" ${user.identity === '执法长老' ? 'selected' : ''}>执法长老</option>
-                                    <option value="外务长老" ${user.identity === '外务长老' ? 'selected' : ''}>外务长老</option>
-                                    <option value="云栖圃药长老" ${user.identity === '云栖圃药长老' ? 'selected' : ''}>云栖圃药长老</option>
-                                    <option value="执法堂主" ${user.identity === '执法堂主' ? 'selected' : ''}>执法堂主</option>
-                                    <option value="刑堂执事" ${user.identity === '刑堂执事' ? 'selected' : ''}>刑堂执事</option>
-                                    <option value="任务堂执事" ${user.identity === '任务堂执事' ? 'selected' : ''}>任务堂执事</option>
-                                    <option value="贡献堂执事" ${user.identity === '贡献堂执事' ? 'selected' : ''}>贡献堂执事</option>
-                                    <option value="藏经阁看守" ${user.identity === '藏经阁看守' ? 'selected' : ''}>藏经阁看守</option>
-                                    <option value="丹殿主事" ${user.identity === '丹殿主事' ? 'selected' : ''}>丹殿主事</option>
-                                    <option value="器殿主事" ${user.identity === '器殿主事' ? 'selected' : ''}>器殿主事</option>
-                                    <option value="符殿主事" ${user.identity === '符殿主事' ? 'selected' : ''}>符殿主事</option>
-                                    <option value="阵殿主事" ${user.identity === '阵殿主事' ? 'selected' : ''}>阵殿主事</option>
-                                    <option value="凝云谷主" ${user.identity === '凝云谷主' ? 'selected' : ''}>凝云谷主</option>
-                                    <option value="落霞岭主" ${user.identity === '落霞岭主' ? 'selected' : ''}>落霞岭主</option>
-                                    <option value="万妖岭主" ${user.identity === '万妖岭主' ? 'selected' : ''}>万妖岭主</option>
-                                    <option value="凝霜峰主" ${user.identity === '凝霜峰主' ? 'selected' : ''}>凝霜峰主</option>
-                                    <option value="朝阳峰主" ${user.identity === '朝阳峰主' ? 'selected' : ''}>朝阳峰主</option>
-                                    <option value="皓月峰主" ${user.identity === '皓月峰主' ? 'selected' : ''}>皓月峰主</option>
-                                    <option value="清风峰主" ${user.identity === '清风峰主' ? 'selected' : ''}>清风峰主</option>
-                                    <option value="流霞峰主" ${user.identity === '流霞峰主' ? 'selected' : ''}>流霞峰主</option>
-                                    <option value="惊雷峰主" ${user.identity === '惊雷峰主' ? 'selected' : ''}>惊雷峰主</option>
-                                    <option value="甘霖峰主" ${user.identity === '甘霖峰主' ? 'selected' : ''}>甘霖峰主</option>
-                                    <option value="苍松峰主" ${user.identity === '苍松峰主' ? 'selected' : ''}>苍松峰主</option>
-                                    <option value="翠柏峰主" ${user.identity === '翠柏峰主' ? 'selected' : ''}>翠柏峰主</option>
-                                    <option value="丹霞峰主" ${user.identity === '丹霞峰主' ? 'selected' : ''}>丹霞峰主</option>
-                                    <option value="碧波峰主" ${user.identity === '碧波峰主' ? 'selected' : ''}>碧波峰主</option>
-                                    <option value="傲雪峰主" ${user.identity === '傲雪峰主' ? 'selected' : ''}>傲雪峰主</option>
-                                    <option value="普通弟子" ${user.identity === '普通弟子' ? 'selected' : ''}>普通弟子</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="edit-realm" class="block text-gray-600 mb-2">境界</label>
-                                <input type="text" id="edit-realm" class="form-input w-full px-4 py-2" value="${user.realm}" required>
-                            </div>
-                            <div>
-                                <label for="edit-contribution" class="block text-gray-600 mb-2">贡献点</label>
-                                <input type="number" id="edit-contribution" class="form-input w-full px-4 py-2" value="${user.contribution}" min="0" required>
-                            </div>
-                            <button type="submit" class="btn-primary">保存修改</button>
-                        </form>
-                    `;
-                    
-                    document.getElementById('modal').style.display = 'block';
-                    
-                    // 修改成员信息表单提交
-                    document.getElementById('edit-member-form').addEventListener('submit', function(e) {
-                        e.preventDefault();
-                        const editUsername = document.getElementById('edit-username').value;
-                        const editIdentity = document.getElementById('edit-identity').value;
-                        const editRealm = document.getElementById('edit-realm').value;
-                        const editContribution = parseInt(document.getElementById('edit-contribution').value);
-                        
-                        // 更新成员信息
-                        const users = JSON.parse(localStorage.getItem('users'));
-                        const userIndex = users.findIndex(u => u.id === userId);
-                        users[userIndex].username = editUsername;
-                        users[userIndex].identity = editIdentity;
-                        users[userIndex].realm = editRealm;
-                        users[userIndex].contribution = editContribution;
-                        localStorage.setItem('users', JSON.stringify(users));
-                        
-                        // 如果修改的是当前用户，更新当前用户信息
-                        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-                        if (currentUser.id === userId) {
-                            currentUser.username = editUsername;
-                            currentUser.identity = editIdentity;
-                            currentUser.realm = editRealm;
-                            currentUser.contribution = editContribution;
-                            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                            
-                            // 更新页面显示
-                            document.getElementById('current-username').textContent = editUsername;
-                            document.getElementById('current-identity').textContent = editIdentity;
-                            document.getElementById('personal-name').textContent = editUsername;
-                            document.getElementById('personal-identity').textContent = editIdentity;
-                            document.getElementById('personal-realm').textContent = editRealm;
-                            document.getElementById('personal-contribution').textContent = editContribution;
-                        }
-                        
-                        showToast('成员信息修改成功', 'success');
-                        document.getElementById('modal').style.display = 'none';
-                        
-                        // 重新加载成员列表
-                        loadMemberList();
-                    });
-                });
-            });
+            // 显示管理员按钮
+            if (user.isAdmin) {
+                document.getElementById('adminButtons').classList.remove('hidden');
+            } else {
+                document.getElementById('adminButtons').classList.add('hidden');
+            }
         }
-        
-        // 加载任务列表
+
+        function register() {
+            const username = document.getElementById('registerUsername').value.trim();
+            const name = document.getElementById('registerName').value.trim();
+            const identity = document.getElementById('registerIdentity').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const password2 = document.getElementById('registerPassword2').value;
+
+            // 验证输入
+            if (!username || !name || !identity || !password || !password2) {
+                showError('registerError', '请填写所有信息');
+                return;
+            }
+
+            if (password !== password2) {
+                showError('registerError', '两次密码不一致');
+                return;
+            }
+
+            let users = JSON.parse(localStorage.getItem('qingyunzong_users') || '[]');
+            
+            // 检查用户名是否已存在
+            if (users.some(u => u.username === username)) {
+                showError('registerError', '用户名已存在');
+                return;
+            }
+
+            // 创建新用户
+            const newUser = {
+                username: username,
+                name: name,
+                identity: identity,
+                password: password,
+                contribution: 0,
+                isAdmin: false,
+                isSuperAdmin: false
+            };
+
+            users.push(newUser);
+            localStorage.setItem('qingyunzong_users', JSON.stringify(users));
+
+            document.getElementById('registerSuccess').textContent = '注册成功！请返回登录';
+            document.getElementById('registerSuccess').classList.remove('hidden');
+            document.getElementById('registerError').classList.add('hidden');
+            
+            // 清空输入框
+            document.getElementById('registerUsername').value = '';
+            document.getElementById('registerName').value = '';
+            document.getElementById('registerIdentity').value = '';
+            document.getElementById('registerPassword').value = '';
+            document.getElementById('registerPassword2').value = '';
+        }
+
+        function logout() {
+            // 清除登录状态，但保留用户数据
+            localStorage.removeItem('qingyunzong_loggedUser');
+            showLogin();
+        }
+
+        // 主菜单和面板切换
+        function showMainMenu() {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('registerSection').classList.add('hidden');
+            document.getElementById('mainMenu').classList.remove('hidden');
+            document.getElementById('adminPanel').classList.add('hidden');
+            document.getElementById('taskPanel').classList.add('hidden');
+            document.getElementById('shopPanel').classList.add('hidden');
+            document.getElementById('memberPanel').classList.add('hidden');
+        }
+
+        function showAdminPanel() {
+            document.getElementById('mainMenu').classList.add('hidden');
+            document.getElementById('adminPanel').classList.remove('hidden');
+            loadAdminTaskList(); // 加载管理员任务列表
+        }
+
+        function showTaskPanel() {
+            document.getElementById('mainMenu').classList.add('hidden');
+            document.getElementById('taskPanel').classList.remove('hidden');
+            loadTaskList(); // 加载任务列表
+        }
+
+        function showShopPanel() {
+            document.getElementById('mainMenu').classList.add('hidden');
+            document.getElementById('shopPanel').classList.remove('hidden');
+            loadShopList(); // 加载商城列表
+        }
+
+        function showMemberPanel() {
+            document.getElementById('mainMenu').classList.add('hidden');
+            document.getElementById('memberPanel').classList.remove('hidden');
+            loadMemberList(); // 加载成员列表
+        }
+
+        // 任务相关
+        function publishTask() {
+            const title = document.getElementById('taskTitle').value.trim();
+            const content = document.getElementById('taskContent').value.trim();
+            const reward = parseInt(document.getElementById('taskReward').value);
+            
+            if (!title || !content || isNaN(reward) || reward <= 0) {
+                alert('请填写完整的任务信息，奖励必须为正数');
+                return;
+            }
+
+            const loggedUser = JSON.parse(localStorage.getItem('qingyunzong_loggedUser') || 'null');
+            if (!loggedUser) {
+                alert('请先登录');
+                return;
+            }
+
+            let tasks = JSON.parse(localStorage.getItem('qingyunzong_tasks') || '[]');
+            const newTask = {
+                id: tasks.length > 0 ? Math.max(...tasks.map(t => t.id)) + 1 : 1,
+                title: title,
+                content: content,
+                reward: reward,
+                publisher: loggedUser.name,
+                time: new Date().toLocaleString()
+            };
+
+            tasks.push(newTask);
+            localStorage.setItem('qingyunzong_tasks', JSON.stringify(tasks));
+
+            // 清空输入框
+            document.getElementById('taskTitle').value = '';
+            document.getElementById('taskContent').value = '';
+            document.getElementById('taskReward').value = '';
+
+            alert('任务发布成功！');
+            loadAdminTaskList(); // 刷新管理员任务列表
+        }
+
         function loadTaskList() {
-            const tasks = JSON.parse(localStorage.getItem('tasks'));
-            const taskList = document.getElementById('task-list');
-            
-            taskList.innerHTML = '';
+            const tasks = JSON.parse(localStorage.getItem('qingyunzong_tasks') || '[]');
+            const taskList = document.getElementById('taskList');
             
             if (tasks.length === 0) {
-                taskList.innerHTML = '<tr><td colspan="8" class="text-center py-4">暂无任务</td></tr>';
+                taskList.innerHTML = '<p class="error">暂无任务</p>';
                 return;
             }
-            
+
+            taskList.innerHTML = '';
             tasks.forEach(task => {
-                const row = document.createElement('tr');
-                
-                // 计算剩余时间
-                let remainingTime = '';
-                if (task.status === '进行中' && task.endTime) {
-                    const now = new Date();
-                    const endTime = new Date(task.endTime);
-                    const diffTime = endTime - now;
-                    
-                    if (diffTime > 0) {
-                        const diffMinutes = Math.ceil(diffTime / (1000 * 60));
-                        remainingTime = `${diffMinutes}分钟`;
-                    } else {
-                        remainingTime = '已结束';
-                    }
-                }
-                
-                row.innerHTML = `
-                    <td class="border border-gray-300 px-4 py-2">${task.name}</td>
-                    <td class="border border-gray-300 px-4 py-2">${task.publisherName}</td>
-                    <td class="border border-gray-300 px-4 py-2">${task.quantity}</td>
-                    <td class="border border-gray-300 px-4 py-2">${task.maxParticipants}</td>
-                    <td class="border border-gray-300 px-4 py-2">${task.currentParticipants}</td>
-                    <td class="border border-gray-300 px-4 py-2">${task.reward}</td>
-                    <td class="border border-gray-300 px-4 py-2">${task.status}${remainingTime ? ` (${remainingTime})` : ''}</td>
-                    <td class="border border-gray-300 px-4 py-2">
-                        <button class="btn-small btn-warning mr-2 edit-task" data-id="${task.id}">修改</button>
-                        <button class="btn-small btn-danger delete-task" data-id="${task.id}">删除</button>
-                    </td>
-                `;
-                
-                taskList.appendChild(row);
-            });
-            
-            // 添加修改任务事件
-            document.querySelectorAll('.edit-task').forEach(button => {
-                button.addEventListener('click', function() {
-                    const taskId = this.getAttribute('data-id');
-                    const tasks = JSON.parse(localStorage.getItem('tasks'));
-                    const task = tasks.find(t => t.id === taskId);
-                    
-                    if (task.status === '进行中') {
-                        showToast('进行中的任务不能修改', 'error');
-                        return;
-                    }
-                    
-                    const modalTitle = document.getElementById('modal-title');
-                    const modalBody = document.getElementById('modal-body');
-                    
-                    modalTitle.textContent = '修改任务';
-                    modalBody.innerHTML = `
-                        <form id="edit-task-form" class="space-y-4">
-                            <div>
-                                <label for="edit-task-name" class="block text-gray-600 mb-2">任务名称</label>
-                                <input type="text" id="edit-task-name" class="form-input w-full px-4 py-2" value="${task.name}" required>
-                            </div>
-                            <div>
-                                <label for="edit-task-quantity" class="block text-gray-600 mb-2">任务数量</label>
-                                <input type="number" id="edit-task-quantity" class="form-input w-full px-4 py-2" value="${task.quantity}" min="1" required>
-                            </div>
-                            <div>
-                                <label for="edit-task-participants" class="block text-gray-600 mb-2">所需人数</label>
-                                <input type="number" id="edit-task-participants" class="form-input w-full px-4 py-2" value="${task.maxParticipants}" min="1" required>
-                            </div>
-                            <div>
-                                <label for="edit-task-reward" class="block text-gray-600 mb-2">任务报酬</label>
-                                <input type="number" id="edit-task-reward" class="form-input w-full px-4 py-2" value="${task.reward}" min="1" required>
-                            </div>
-                            <button type="submit" class="btn-primary">保存修改</button>
-                        </form>
-                    `;
-                    
-                    document.getElementById('modal').style.display = 'block';
-                    
-                    // 修改任务表单提交
-                    document.getElementById('edit-task-form').addEventListener('submit', function(e) {
-                        e.preventDefault();
-                        const editTaskName = document.getElementById('edit-task-name').value;
-                        const editTaskQuantity = parseInt(document.getElementById('edit-task-quantity').value);
-                        const editTaskParticipants = parseInt(document.getElementById('edit-task-participants').value);
-                        const editTaskReward = parseInt(document.getElementById('edit-task-reward').value);
-                        
-                        // 更新任务信息
-                        const tasks = JSON.parse(localStorage.getItem('tasks'));
-                        const taskIndex = tasks.findIndex(t => t.id === taskId);
-                        tasks[taskIndex].name = editTaskName;
-                        tasks[taskIndex].quantity = editTaskQuantity;
-                        tasks[taskIndex].maxParticipants = editTaskParticipants;
-                        tasks[taskIndex].reward = editTaskReward;
-                        localStorage.setItem('tasks', JSON.stringify(tasks));
-                        
-                        showToast('任务修改成功', 'success');
-                        document.getElementById('modal').style.display = 'none';
-                        
-                        // 重新加载任务列表
-                        loadTaskList();
-                    });
-                });
-            });
-            
-            // 添加删除任务事件
-            document.querySelectorAll('.delete-task').forEach(button => {
-                button.addEventListener('click', function() {
-                    const taskId = this.getAttribute('data-id');
-                    
-                    if (confirm('确定要删除这个任务吗？')) {
-                        const tasks = JSON.parse(localStorage.getItem('tasks'));
-                        const filteredTasks = tasks.filter(t => t.id !== taskId);
-                        localStorage.setItem('tasks', JSON.stringify(filteredTasks));
-                        
-                        showToast('任务删除成功', 'success');
-                        
-                        // 重新加载任务列表
-                        loadTaskList();
-                    }
-                });
-            });
-        }
-        
-        // 加载商品列表
-        function loadShopItems() {
-            const items = JSON.parse(localStorage.getItem('items'));
-            const itemList = document.getElementById('item-list');
-            
-            itemList.innerHTML = '';
-            
-            if (items.length === 0) {
-                itemList.innerHTML = '<p class="text-center py-4">暂无商品</p>';
-                return;
-            }
-            
-            items.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'card item-card';
-                
-                // 计算剩余数量百分比
-                const remainingPercentage = (item.remainingQuantity / item.totalQuantity) * 100;
-                
-                card.innerHTML = `
-                    <div class="p-4">
-                        <h3 class="text-lg font-bold text-dark-green mb-2">${item.name}</h3>
-                        <p class="text-gray-600 mb-4">${item.description || '暂无描述'}</p>
-                        <div class="mb-2">
-                            <span class="text-gray-600">所需贡献点：</span>
-                            <span class="font-bold text-dark-green">${item.price}</span>
-                        </div>
-                        <div class="mb-4">
-                            <span class="text-gray-600">数量：</span>
-                            <span class="font-bold text-dark-green">${item.remainingQuantity}/${item.totalQuantity}</span>
-                        </div>
-                        <div class="progress-bar mb-4">
-                            <div class="progress-fill" style="width: ${remainingPercentage}%"></div>
-                        </div>
-                        <div class="flex space-x-2">
-                            <button class="btn-small btn-warning edit-item flex-1" data-id="${item.id}">修改</button>
-                            <button class="btn-small btn-danger delete-item flex-1" data-id="${item.id}">删除</button>
-                        </div>
+                taskList.innerHTML += `
+                    <div class="task-item">
+                        <h4>${task.title}</h4>
+                        <p><strong>任务详情：</strong>${task.content}</p>
+                        <p><strong>贡献点奖励：</strong>${task.reward}</p>
+                        <p><strong>发布人：</strong>${task.publisher}</p>
+                        <p><strong>发布时间：</strong>${task.time}</p>
+                        <button onclick="acceptTask(${task.id})">接取任务</button>
                     </div>
                 `;
-                
-                itemList.appendChild(card);
-            });
-            
-            // 添加修改商品事件
-            document.querySelectorAll('.edit-item').forEach(button => {
-                button.addEventListener('click', function() {
-                    const itemId = this.getAttribute('data-id');
-                    const items = JSON.parse(localStorage.getItem('items'));
-                    const item = items.find(i => i.id === itemId);
-                    
-                    const modalTitle = document.getElementById('modal-title');
-                    const modalBody = document.getElementById('modal-body');
-                    
-                    modalTitle.textContent = '修改商品';
-                    modalBody.innerHTML = `
-                        <form id="edit-item-form" class="space-y-4">
-                            <div>
-                                <label for="edit-item-name" class="block text-gray-600 mb-2">商品名称</label>
-                                <input type="text" id="edit-item-name" class="form-input w-full px-4 py-2" value="${item.name}" required>
-                            </div>
-                            <div>
-                                <label for="edit-item-quantity" class="block text-gray-600 mb-2">商品数量</label>
-                                <input type="number" id="edit-item-quantity" class="form-input w-full px-4 py-2" value="${item.totalQuantity}" min="1" max="999" required>
-                            </div>
-                            <div>
-                                <label for="edit-item-remaining" class="block text-gray-600 mb-2">剩余数量</label>
-                                <input type="number" id="edit-item-remaining" class="form-input w-full px-4 py-2" value="${item.remainingQuantity}" min="0" max="${item.totalQuantity}" required>
-                            </div>
-                            <div>
-                                <label for="edit-item-price" class="block text-gray-600 mb-2">所需贡献点</label>
-                                <input type="number" id="edit-item-price" class="form-input w-full px-4 py-2" value="${item.price}" min="1" required>
-                            </div>
-                            <div>
-                                <label for="edit-item-description" class="block text-gray-600 mb-2">商品描述</label>
-                                <textarea id="edit-item-description" class="form-input w-full px-4 py-2" rows="3">${item.description || ''}</textarea>
-                            </div>
-                            <button type="submit" class="btn-primary">保存修改</button>
-                        </form>
-                    `;
-                    
-                    document.getElementById('modal').style.display = 'block';
-                    
-                    // 修改商品表单提交
-                    document.getElementById('edit-item-form').addEventListener('submit', function(e) {
-                        e.preventDefault();
-                        const editItemName = document.getElementById('edit-item-name').value;
-                        const editItemQuantity = parseInt(document.getElementById('edit-item-quantity').value);
-                        const editItemRemaining = parseInt(document.getElementById('edit-item-remaining').value);
-                        const editItemPrice = parseInt(document.getElementById('edit-item-price').value);
-                        const editItemDescription = document.getElementById('edit-item-description').value;
-                        
-                        if (editItemRemaining > editItemQuantity) {
-                            showToast('剩余数量不能大于总数量', 'error');
-                            return;
-                        }
-                        
-                        // 更新商品信息
-                        const items = JSON.parse(localStorage.getItem('items'));
-                        const itemIndex = items.findIndex(i => i.id === itemId);
-                        items[itemIndex].name = editItemName;
-                        items[itemIndex].totalQuantity = editItemQuantity;
-                        items[itemIndex].remainingQuantity = editItemRemaining;
-                        items[itemIndex].price = editItemPrice;
-                        items[itemIndex].description = editItemDescription;
-                        localStorage.setItem('items', JSON.stringify(items));
-                        
-                        showToast('商品修改成功', 'success');
-                        document.getElementById('modal').style.display = 'none';
-                        
-                        // 重新加载商品列表
-                        loadShopItems();
-                    });
-                });
-            });
-            
-            // 添加删除商品事件
-            document.querySelectorAll('.delete-item').forEach(button => {
-                button.addEventListener('click', function() {
-                    const itemId = this.getAttribute('data-id');
-                    
-                    if (confirm('确定要删除这个商品吗？')) {
-                        const items = JSON.parse(localStorage.getItem('items'));
-                        const filteredItems = items.filter(i => i.id !== itemId);
-                        localStorage.setItem('items', JSON.stringify(filteredItems));
-                        
-                        showToast('商品删除成功', 'success');
-                        
-                        // 重新加载商品列表
-                        loadShopItems();
-                    }
-                });
             });
         }
-        
-        // 加载管理员任务列表
+
         function loadAdminTaskList() {
-            const tasks = JSON.parse(localStorage.getItem('tasks'));
-            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-            const adminTaskList = document.getElementById('admin-task-list');
+            const tasks = JSON.parse(localStorage.getItem('qingyunzong_tasks') || '[]');
+            const adminTaskList = document.getElementById('adminTaskList');
             
-            // 筛选当前用户发布的任务
-            const userTasks = tasks.filter(task => task.publisher === currentUser.id);
-            
+            if (tasks.length === 0) {
+                adminTaskList.innerHTML = '<p class="error">暂无已发布任务</p>';
+                return;
+            }
+
             adminTaskList.innerHTML = '';
-            
-            if (userTasks.length === 0) {
-                adminTaskList.innerHTML = '<tr><td colspan="6" class="text-center py-4">暂无发布的任务</td></tr>';
-                return;
-            }
-            
-            userTasks.forEach(task => {
-                const row = document.createElement('tr');
-                
-                // 获取参与人员姓名
-                const users = JSON.parse(localStorage.getItem('users'));
-                const participantNames = task.participants.map(pId => {
-                    const user = users.find(u => u.id === pId);
-                    return user ? user.username : '';
-                }).join(', ');
-                
-                // 计算剩余时间
-                let remainingTime = '';
-                if (task.status === '进行中' && task.endTime) {
-                    const now = new Date();
-                    const endTime = new Date(task.endTime);
-                    const diffTime = endTime - now;
-                    
-                    if (diffTime > 0) {
-                        const diffMinutes = Math.ceil(diffTime / (1000 * 60));
-                        remainingTime = `${diffMinutes}分钟`;
-                    } else {
-                        remainingTime = '已结束';
-                    }
-                }
-                
-                row.innerHTML = `
-                    <td class="border border-gray-300 px-4 py-2">${task.name}</td>
-                    <td class="border border-gray-300 px-4 py-2">${task.quantity}</td>
-                    <td class="border border-gray-300 px-4 py-2">${participantNames || '暂无'}</td>
-                    <td class="border border-gray-300 px-4 py-2">${task.reward}</td>
-                    <td class="border border-gray-300 px-4 py-2">${task.status}</td>
-                    <td class="border border-gray-300 px-4 py-2">${remainingTime || '-'}</td>
-                `;
-                
-                adminTaskList.appendChild(row);
-            });
-        }
-        
-        // 加载管理员成员列表
-        function loadAdminMemberList() {
-            const users = JSON.parse(localStorage.getItem('users'));
-            const adminMemberList = document.getElementById('admin-member-list');
-            
-            // 筛选非管理员用户
-            const nonAdminUsers = users.filter(user => 
-                user.identity !== '太上长老' && 
-                user.identity !== '宗主' && 
-                user.identity !== '副宗主'
-            );
-            
-            // 按贡献点排序
-            nonAdminUsers.sort((a, b) => b.contribution - a.contribution);
-            
-            adminMemberList.innerHTML = '';
-            
-            if (nonAdminUsers.length === 0) {
-                adminMemberList.innerHTML = '<tr><td colspan="5" class="text-center py-4">暂无成员</td></tr>';
-                return;
-            }
-            
-            nonAdminUsers.forEach((user, index) => {
-                const row = document.createElement('tr');
-                
-                // 添加排名样式
-                let rankClass = '';
-                if (index === 0) rankClass = 'rank-gold';
-                else if (index === 1) rankClass = 'rank-silver';
-                else if (index === 2) rankClass = 'rank-bronze';
-                
-                row.innerHTML = `
-                    <td class="border border-gray-300 px-4 py-2 ${rankClass} font-bold">${index + 1}</td>
-                    <td class="border border-gray-300 px-4 py-2">${user.username}</td>
-                    <td class="border border-gray-300 px-4 py-2">${user.identity}</td>
-                    <td class="border border-gray-300 px-4 py-2">${user.realm}</td>
-                    <td class="border border-gray-300 px-4 py-2">${user.contribution}</td>
-                `;
-                
-                adminMemberList.appendChild(row);
-            });
-        }
-        
-        // 加载任务卡片列表
-        function loadTaskCards() {
-            const tasks = JSON.parse(localStorage.getItem('tasks'));
-            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-            const taskCardList = document.getElementById('task-card-list');
-            
-            // 筛选未接取或当前用户已接取的任务
-            const availableTasks = tasks.filter(task => 
-                task.status === '未接取' || 
-                (task.status === '进行中' && task.participants.includes(currentUser.id))
-            );
-            
-            taskCardList.innerHTML = '';
-            
-            if (availableTasks.length === 0) {
-                taskCardList.innerHTML = '<p class="text-center py-4 col-span-full">暂无可接取的任务</p>';
-                return;
-            }
-            
-            availableTasks.forEach(task => {
-                const card = document.createElement('div');
-                card.className = `card task-card ${task.status === '进行中' ? 'active' : ''}`;
-                
-                // 检查当前用户是否已接取该任务
-                const hasAccepted = task.participants.includes(currentUser.id);
-                
-                // 计算剩余时间
-                let remainingTime = '';
-                if (task.status === '进行中' && task.endTime) {
-                    const now = new Date();
-                    const endTime = new Date(task.endTime);
-                    const diffTime = endTime - now;
-                    
-                    if (diffTime > 0) {
-                        const diffMinutes = Math.ceil(diffTime / (1000 * 60));
-                        remainingTime = `剩余时间：<span class="countdown">${diffMinutes}</span>分钟`;
-                    } else {
-                        remainingTime = '已结束';
-                    }
-                }
-                
-                // 获取任务发布人姓名
-                const users = JSON.parse(localStorage.getItem('users'));
-                const publisher = users.find(u => u.id === task.publisher);
-                const publisherName = publisher ? publisher.username : '未知';
-                
-                card.innerHTML = `
-                    <div class="p-4">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-lg font-bold text-dark-green">${task.name}</h3>
-                            <span class="bg-medium-green text-white px-2 py-1 rounded text-xs">${task.status}</span>
-                        </div>
-                        <p class="text-gray-600 mb-2">发布人：${publisherName}</p>
-                        <div class="grid grid-cols-2 gap-2 mb-4">
-                            <div>
-                                <span class="text-gray-600">数量：</span>
-                                <span class="font-bold">${task.quantity}</span>
-                            </div>
-                            <div>
-                                <span class="text-gray-600">所需人数：</span>
-                                <span class="font-bold">${task.currentParticipants}/${task.maxParticipants}</span>
-                            </div>
-                            <div>
-                                <span class="text-gray-600">完成时间：</span>
-                                <span class="font-bold">${task.duration}分钟</span>
-                            </div>
-                            <div>
-                                <span class="text-gray-600">贡献点：</span>
-                                <span class="font-bold text-dark-green">${task.reward}</span>
-                            </div>
-                        </div>
-                        ${task.status === '进行中' ? `<p class="text-red-600 mb-4">${remainingTime}</p>` : ''}
-                        <button class="btn-primary w-full ${task.status !== '未接取' || hasAccepted ? 'opacity-50 cursor-not-allowed' : ''}" ${task.status !== '未接取' || hasAccepted ? 'disabled' : ''} onclick="acceptTask('${task.id}')">
-                            ${hasAccepted ? '已接取' : task.status === '未接取' ? '接取任务' : '进行中'}
-                        </button>
-                    </div>
-                `;
-                
-                taskCardList.appendChild(card);
-            });
-        }
-        
-        // 加载用户商城商品列表
-        function loadUserShopItems() {
-            const items = JSON.parse(localStorage.getItem('items'));
-            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-            const shopItemList = document.getElementById('shop-item-list');
-            
-            shopItemList.innerHTML = '';
-            
-            if (items.length === 0) {
-                shopItemList.innerHTML = '<p class="text-center py-4 col-span-full">暂无商品</p>';
-                return;
-            }
-            
-            items.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'card item-card';
-                
-                // 计算剩余数量百分比
-                const remainingPercentage = (item.remainingQuantity / item.totalQuantity) * 100;
-                
-                // 检查用户贡献点是否足够
-                const canAfford = currentUser.contribution >= item.price;
-                
-                card.innerHTML = `
-                    <div class="p-4">
-                        <h3 class="text-lg font-bold text-dark-green mb-2">${item.name}</h3>
-                        <p class="text-gray-600 mb-4">${item.description || '暂无描述'}</p>
-                        <div class="mb-2">
-                            <span class="text-gray-600">所需贡献点：</span>
-                            <span class="font-bold text-dark-green">${item.price}</span>
-                        </div>
-                        <div class="mb-4">
-                            <span class="text-gray-600">数量：</span>
-                            <span class="font-bold text-dark-green">${item.remainingQuantity}/${item.totalQuantity}</span>
-                        </div>
-                        <div class="progress-bar mb-4">
-                            <div class="progress-fill" style="width: ${remainingPercentage}%"></div>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <input type="number" id="quantity-${item.id}" class="form-input flex-1 px-2 py-1" min="1" max="${item.remainingQuantity}" value="1">
-                            <button class="btn-primary flex-1 ${!canAfford || item.remainingQuantity === 0 ? 'opacity-50 cursor-not-allowed' : ''}" ${!canAfford || item.remainingQuantity === 0 ? 'disabled' : ''} onclick="exchangeItem('${item.id}')">
-                                兑换
-                            </button>
-                        </div>
-                    </div>
-                `;
-                
-                shopItemList.appendChild(card);
-            });
-        }
-        
-        // 接取任务
-        function acceptTask(taskId) {
-            const tasks = JSON.parse(localStorage.getItem('tasks'));
-            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-            
-            const taskIndex = tasks.findIndex(t => t.id === taskId);
-            if (taskIndex === -1) {
-                showToast('任务不存在', 'error');
-                return;
-            }
-            
-            const task = tasks[taskIndex];
-            
-            // 检查任务是否已满
-            if (task.currentParticipants >= task.maxParticipants) {
-                showToast('任务人数已满', 'error');
-                return;
-            }
-            
-            // 更新任务状态
-            task.currentParticipants++;
-            task.participants.push(currentUser.id);
-            
-            // 如果是第一个接取任务的人，设置任务状态为进行中并开始倒计时
-            if (task.currentParticipants === 1) {
-                task.status = '进行中';
-                const endTime = new Date();
-                endTime.setMinutes(endTime.getMinutes() + task.duration);
-                task.endTime = endTime.toISOString();
-            }
-            
-            localStorage.setItem('tasks', JSON.stringify(tasks));
-            
-            showToast('任务接取成功', 'success');
-            
-            // 重新加载任务卡片列表
-            loadTaskCards();
-        }
-        
-        // 兑换商品
-        function exchangeItem(itemId) {
-            const items = JSON.parse(localStorage.getItem('items'));
-            const users = JSON.parse(localStorage.getItem('users'));
-            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-            
-            const itemIndex = items.findIndex(i => i.id === itemId);
-            if (itemIndex === -1) {
-                showToast('商品不存在', 'error');
-                return;
-            }
-            
-            const item = items[itemIndex];
-            
-            // 获取兑换数量
-            const quantityInput = document.getElementById(`quantity-${itemId}`);
-            const quantity = parseInt(quantityInput.value);
-            
-            if (isNaN(quantity) || quantity < 1) {
-                showToast('请输入有效的数量', 'error');
-                return;
-            }
-            
-            if (quantity > item.remainingQuantity) {
-                showToast('商品数量不足', 'error');
-                return;
-            }
-            
-            const totalPrice = item.price * quantity;
-            
-            if (currentUser.contribution < totalPrice) {
-                showToast('贡献点不足', 'error');
-                return;
-            }
-            
-            // 更新商品剩余数量
-            item.remainingQuantity -= quantity;
-            localStorage.setItem('items', JSON.stringify(items));
-            
-            // 更新用户贡献点
-            const userIndex = users.findIndex(u => u.id === currentUser.id);
-            users[userIndex].contribution -= totalPrice;
-            localStorage.setItem('users', JSON.stringify(users));
-            
-            // 更新当前用户
-            currentUser.contribution -= totalPrice;
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            
-            showToast(`成功兑换${quantity}个${item.name}`, 'success');
-            
-            // 更新个人信息页面
-            document.getElementById('user-personal-contribution').textContent = currentUser.contribution;
-            
-            // 重新加载商城商品列表
-            loadUserShopItems();
-        }
-        
-        // 检查任务状态
-        function checkTasksStatus() {
-            const tasks = JSON.parse(localStorage.getItem('tasks'));
-            const users = JSON.parse(localStorage.getItem('users'));
-            let hasChanges = false;
-            
             tasks.forEach(task => {
-                if (task.status === '进行中' && task.endTime) {
-                    const now = new Date();
-                    const endTime = new Date(task.endTime);
-                    
-                    if (now >= endTime) {
-                        // 任务完成，结算贡献点
-                        task.status = '已完成';
-                        
-                        // 计算每个参与者获得的贡献点
-                        const rewardPerPerson = task.reward / task.participants.length;
-                        
-                        // 更新参与者贡献点
-                        task.participants.forEach(participantId => {
-                            const userIndex = users.findIndex(u => u.id === participantId);
-                            if (userIndex !== -1) {
-                                users[userIndex].contribution += rewardPerPerson;
-                                
-                                // 如果是当前用户，更新当前用户信息
-                                const currentUser = localStorage.getItem('currentUser');
-                                if (currentUser) {
-                                    const currentUserObj = JSON.parse(currentUser);
-                                    if (currentUserObj.id === participantId) {
-                                        currentUserObj.contribution += rewardPerPerson;
-                                        localStorage.setItem('currentUser', JSON.stringify(currentUserObj));
-                                        
-                                        // 更新个人信息页面
-                                        if (document.getElementById('user-personal-contribution')) {
-                                            document.getElementById('user-personal-contribution').textContent = currentUserObj.contribution;
-                                        }
-                                        if (document.getElementById('admin-personal-contribution')) {
-                                            document.getElementById('admin-personal-contribution').textContent = currentUserObj.contribution;
-                                        }
-                                        if (document.getElementById('personal-contribution')) {
-                                            document.getElementById('personal-contribution').textContent = currentUserObj.contribution;
-                                        }
-                                    }
-                                }
-                            }
-                        });
-                        
-                        hasChanges = true;
-                    }
-                }
+                adminTaskList.innerHTML += `
+                    <div class="task-item">
+                        <h4>${task.title}</h4>
+                        <p><strong>任务详情：</strong>${task.content}</p>
+                        <p><strong>贡献点奖励：</strong>${task.reward}</p>
+                        <p><strong>发布人：</strong>${task.publisher}</p>
+                        <p><strong>发布时间：</strong>${task.time}</p>
+                        <button onclick="deleteTask(${task.id})">删除任务</button>
+                    </div>
+                `;
             });
-            
-            // 移除已完成的任务
-            const activeTasks = tasks.filter(task => task.status !== '已完成');
-            
-            if (activeTasks.length !== tasks.length) {
-                localStorage.setItem('tasks', JSON.stringify(activeTasks));
-                hasChanges = true;
+        }
+
+        function acceptTask(taskId) {
+            const loggedUser = JSON.parse(localStorage.getItem('qingyunzong_loggedUser') || 'null');
+            if (!loggedUser) {
+                alert('请先登录');
+                return;
             }
+
+            const tasks = JSON.parse(localStorage.getItem('qingyunzong_tasks') || '[]');
+            const task = tasks.find(t => t.id === taskId);
+            if (!task) {
+                alert('任务不存在');
+                return;
+            }
+
+            // 更新用户贡献点
+            let users = JSON.parse(localStorage.getItem('qingyunzong_users') || '[]');
+            const userIndex = users.findIndex(u => u.username === loggedUser.username);
             
-            if (hasChanges) {
-                localStorage.setItem('users', JSON.stringify(users));
+            if (userIndex !== -1) {
+                users[userIndex].contribution = (users[userIndex].contribution || 0) + task.reward;
+                localStorage.setItem('qingyunzong_users', JSON.stringify(users));
                 
-                // 重新加载相关页面
-                if (document.getElementById('task-card-list')) {
-                    loadTaskCards();
-                }
-                if (document.getElementById('task-list')) {
-                    loadTaskList();
-                }
-                if (document.getElementById('admin-task-list')) {
-                    loadAdminTaskList();
-                }
-                if (document.getElementById('member-list')) {
-                    loadMemberList();
-                }
-                if (document.getElementById('admin-member-list')) {
-                    loadAdminMemberList();
-                }
+                // 更新登录状态中的用户信息
+                loggedUser.contribution = users[userIndex].contribution;
+                localStorage.setItem('qingyunzong_loggedUser', JSON.stringify(loggedUser));
+                
+                document.getElementById('userContribution').textContent = `当前贡献点：${loggedUser.contribution}`;
+                alert(`接取任务成功！完成任务获得${task.reward}贡献点`);
             }
         }
-        
-        // 显示Toast提示
-        function showToast(message, type) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.className = `toast ${type} show`;
+
+        function deleteTask(taskId) {
+            if (!confirm('确定要删除这个任务吗？')) {
+                return;
+            }
+
+            let tasks = JSON.parse(localStorage.getItem('qingyunzong_tasks') || '[]');
+            tasks = tasks.filter(t => t.id !== taskId);
+            localStorage.setItem('qingyunzong_tasks', JSON.stringify(tasks));
             
+            loadAdminTaskList();
+            alert('任务删除成功');
+        }
+
+        // 贡献点管理
+        function modifyContribution() {
+            const memberName = document.getElementById('modifyMemberName').value.trim();
+            const contribution = parseInt(document.getElementById('modifyContribution').value);
+            
+            if (!memberName || isNaN(contribution)) {
+                alert('请填写正确的成员名称和贡献点数值');
+                return;
+            }
+
+            let users = JSON.parse(localStorage.getItem('qingyunzong_users') || '[]');
+            const userIndex = users.findIndex(u => u.username === memberName);
+            
+            if (userIndex === -1) {
+                alert('成员不存在');
+                return;
+            }
+
+            users[userIndex].contribution = (users[userIndex].contribution || 0) + contribution;
+            localStorage.setItem('qingyunzong_users', JSON.stringify(users));
+            
+            // 如果修改的是当前登录用户，更新显示
+            const loggedUser = JSON.parse(localStorage.getItem('qingyunzong_loggedUser') || 'null');
+            if (loggedUser && loggedUser.username === memberName) {
+                loggedUser.contribution = users[userIndex].contribution;
+                localStorage.setItem('qingyunzong_loggedUser', JSON.stringify(loggedUser));
+                document.getElementById('userContribution').textContent = `当前贡献点：${loggedUser.contribution}`;
+            }
+
+            document.getElementById('modifyMemberName').value = '';
+            document.getElementById('modifyContribution').value = '';
+            alert('贡献点调整成功！');
+        }
+
+        // 商城相关
+        function addShopItem() {
+            const name = document.getElementById('shopItemName').value.trim();
+            const desc = document.getElementById('shopItemDesc').value.trim();
+            const price = parseInt(document.getElementById('shopItemPrice').value);
+            
+            if (!name || !desc || isNaN(price) || price <= 0) {
+                alert('请填写完整的物品信息，价格必须为正数');
+                return;
+            }
+
+            let shopItems = JSON.parse(localStorage.getItem('qingyunzong_shop') || '[]');
+            const newItem = {
+                id: shopItems.length > 0 ? Math.max(...shopItems.map(i => i.id)) + 1 : 1,
+                name: name,
+                desc: desc,
+                price: price
+            };
+
+            shopItems.push(newItem);
+            localStorage.setItem('qingyunzong_shop', JSON.stringify(shopItems));
+
+            document.getElementById('shopItemName').value = '';
+            document.getElementById('shopItemDesc').value = '';
+            document.getElementById('shopItemPrice').value = '';
+
+            alert('物品添加成功！');
+            loadShopList();
+        }
+
+        function loadShopList() {
+            const shopItems = JSON.parse(localStorage.getItem('qingyunzong_shop') || '[]');
+            const shopList = document.getElementById('shopList');
+            
+            if (shopItems.length === 0) {
+                shopList.innerHTML = '<p class="error">商城暂无物品</p>';
+                return;
+            }
+
+            shopList.innerHTML = '';
+            shopItems.forEach(item => {
+                shopList.innerHTML += `
+                    <div class="shop-item">
+                        <h4>${item.name}</h4>
+                        <p><strong>物品描述：</strong>${item.desc}</p>
+                        <p><strong>所需贡献点：</strong>${item.price}</p>
+                        <button onclick="exchangeItem(${item.id})">兑换</button>
+                    </div>
+                `;
+            });
+        }
+
+        function exchangeItem(itemId) {
+            const loggedUser = JSON.parse(localStorage.getItem('qingyunzong_loggedUser') || 'null');
+            if (!loggedUser) {
+                alert('请先登录');
+                return;
+            }
+
+            const shopItems = JSON.parse(localStorage.getItem('qingyunzong_shop') || '[]');
+            const item = shopItems.find(i => i.id === itemId);
+            if (!item) {
+                alert('物品不存在');
+                return;
+            }
+
+            if ((loggedUser.contribution || 0) < item.price) {
+                alert('贡献点不足，无法兑换！');
+                return;
+            }
+
+            // 扣除贡献点
+            let users = JSON.parse(localStorage.getItem('qingyunzong_users') || '[]');
+            const userIndex = users.findIndex(u => u.username === loggedUser.username);
+            
+            if (userIndex !== -1) {
+                users[userIndex].contribution -= item.price;
+                localStorage.setItem('qingyunzong_users', JSON.stringify(users));
+                
+                // 更新登录状态
+                loggedUser.contribution = users[userIndex].contribution;
+                localStorage.setItem('qingyunzong_loggedUser', JSON.stringify(loggedUser));
+                document.getElementById('userContribution').textContent = `当前贡献点：${loggedUser.contribution}`;
+                
+                alert(`兑换${item.name}成功！扣除${item.price}贡献点`);
+            }
+        }
+
+        // 成员列表
+        function loadMemberList() {
+            const users = JSON.parse(localStorage.getItem('qingyunzong_users') || '[]');
+            const memberList = document.getElementById('memberList');
+            
+            if (users.length === 0) {
+                memberList.innerHTML = '<p class="error">暂无宗门成员</p>';
+                return;
+            }
+
+            memberList.innerHTML = '';
+            users.forEach(user => {
+                memberList.innerHTML += `
+                    <div class="member-item">
+                        <h4>${user.name}</h4>
+                        <p><strong>身份：</strong>${user.identity}</p>
+                        <p><strong>贡献点：</strong>${user.contribution || 0}</p>
+                        <p><strong>权限：</strong>${user.isSuperAdmin ? '最高管理员' : (user.isAdmin ? '普通管理员' : '普通弟子')}</p>
+                    </div>
+                `;
+            });
+        }
+
+        // 辅助函数
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.classList.remove('hidden');
             setTimeout(() => {
-                toast.className = 'toast';
+                errorElement.classList.add('hidden');
             }, 3000);
         }
     </script>
